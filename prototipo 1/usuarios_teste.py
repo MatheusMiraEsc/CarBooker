@@ -75,9 +75,13 @@ def visualizar_usuario(arquivo):
 def main():
 
     while True:
-        print("\n1. Usuário")
+        print("\n============================")
+        print("Bem vindo(a) ao CarBooker!! ")
+        print("============================")
+        print("1. Usuário")
         print("2. Locadora")
         print("3. Sair")
+        print("============================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
             menu2()
