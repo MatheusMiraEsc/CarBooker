@@ -5,11 +5,13 @@ import os
 def menu2():
     arquivo_json = "usuarios.json"
     while True:
-        print("\n1. Cadastrar usuário")
+        print("\n=================================")
+        print("1. Cadastrar usuário")
         print("2. Visualizar usuário")
         print("3. Atualizar informações do usuário")
         print("4. Deletar usuário")
         print("5. Voltar")
+        print("=================================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
 
