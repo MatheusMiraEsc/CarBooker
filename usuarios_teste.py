@@ -14,7 +14,6 @@ def menu2():
         print("=================================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
-
             usuario = cadastrar_usuario()
             add_usuario(usuario, arquivo_json)
         elif opcao == "2":
@@ -40,38 +39,51 @@ def cadastrar_usuario():
 
 
 def add_usuario(usuario, arquivo):
-    with open(arquivo, "r") as f:
-        dados = json.load(f)
+    try:
+        with open(arquivo, "r") as f:
+            dados = json.load(f)
+    except FileNotFoundError:
+        print("Arquivo não encontrado")
+    except Exception as e:
+        print("Ocorreu um erro:", e)
 
     numero_usuarios = len(dados)+1
     nome_usuario = f"Usuário {numero_usuarios}"
     dados[nome_usuario] = usuario
 
-    with open(arquivo, "w") as f:
-        json.dump(dados, f, indent=4)
-    print(f"Usuário {numero_usuarios} cadastrado com sucesso!")
+    try:
+        with open(arquivo, "w") as f:
+            json.dump(dados, f, indent=4)
+        print(f"Usuário {numero_usuarios} cadastrado com sucesso!")
+    except Exception as e:
+        print("Ocorreu um erro: ", e)
 
 
 def visualizar_usuario(arquivo):
-    with open(arquivo, "r") as f:
-        usuario = json.load(f)
-        numero_usuarios = len(usuario)
-        nome_usuario = f"Usuário {numero_usuarios}"
-    nome = input(
-        "Digite o nome do usuário que deseja visualizar: ")
-    senha = input("Digite a senha do usuário: ")
-    usuario_encontrado = False
-    for dados, info in usuario.items():
-        if info["Nome"] == nome and info["Senha"] == senha:
-            usuario_encontrado = True
-            print("\n==============================\n")
-            print(nome_usuario)
-            for chave, valor in info.items():
-                print(f"{chave}: {valor}")
-            print("\n==============================\n")
-            break
-    if not usuario_encontrado:
-        print("Usuário não encontrado ou senha incorreta.")
+    try:
+        with open(arquivo, "r") as f:
+            usuario = json.load(f)
+            numero_usuarios = len(usuario)
+            nome_usuario = f"Usuário {numero_usuarios}"
+        nome = input(
+            "Digite o nome do usuário que deseja visualizar: ")
+        senha = input("Digite a senha do usuário: ")
+        usuario_encontrado = False
+        for dados, info in usuario.items():
+            if info["Nome"] == nome and info["Senha"] == senha:
+                usuario_encontrado = True
+                print("\n==============================\n")
+                print(nome_usuario)
+                for chave, valor in info.items():
+                    print(f"{chave}: {valor}")
+                print("\n==============================\n")
+                break
+        if not usuario_encontrado:
+            print("Usuário não encontrado ou senha incorreta.")
+    except FileNotFoundError:
+        print("Arquivo não encontrado")
+    except Exception as e:
+        print("Ocorreu um erro:", e)
 
 
 def main():
@@ -84,11 +96,16 @@ def main():
         print("2. Locadora")
         print("3. Sair")
         print("============================")
+        arquivo_json = "usuarios.json"
+        caminho_absoluto = os.path.abspath(arquivo_json)
+        print("Caminho absoluto do arquivo:", caminho_absoluto)
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
             menu2()
         elif opcao == "2":
+            print("\n###########################")
             print("Funcionalidade indisponível")
+            print("###########################")
         else:
             break
 
