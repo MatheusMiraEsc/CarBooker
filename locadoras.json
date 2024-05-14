@@ -1,0 +1,30 @@
+{
+    " Locadora 1": {
+        "Nome da Locadora": "123",
+        "CNPJ": "123",
+        "Email": "123",
+        "Telefone": "123",
+        "Senha": "123"
+    },
+    "  Locadora 2": {
+        "Nome": "aba",
+        "CNPJ": "aba",
+        "Email": "aba",
+        "Telefone": "aba",
+        "Senha": "aba"
+    },
+    "  Locadora 3": {
+        "Nome": "Jorge",
+        "CNPJ": "123",
+        "Email": "132",
+        "Telefone": "123",
+        "Senha": "aba"
+    },
+    "  Locadora 4": {
+        "Nome": "123",
+        "CNPJ": "123",
+        "Email": "123",
+        "Telefone": "123",
+        "Senha": "123"
+    }
+}
