@@ -64,9 +64,6 @@ def cadastrar_usuario():
     return usuarios
 
 
-
-
-
 def visualizar_usuario(arquivo):
     try:
         with open(arquivo, "r") as f:
@@ -75,17 +72,18 @@ def visualizar_usuario(arquivo):
             nome_usuario = f"Usuário {numero_usuarios}"
         nome = input(
             "Digite o nome do usuário que deseja visualizar: ")
-        senha = input("Digite a sua senha: ")
         usuario_encontrado = False
         for dados, info in usuario.items():
-            if info["Nome"] == nome and info["Senha"] == senha:
-                usuario_encontrado = True
-                print("\n==============================\n")
-                print(nome_usuario)
-                for chave, valor in info.items():
-                    print(f"{chave}: {valor}")
-                print("\n==============================\n")
-                break
+            if info["Nome"] == nome:
+                senha = input("Digite a sua senha: ")
+                if info["Senha"] == senha:
+                    usuario_encontrado = True
+                    print("\n==============================\n")
+                    print(nome_usuario)
+                    for chave, valor in info.items():
+                        print(f"{chave}: {valor}")
+                    print("\n==============================\n")
+                    break
         if not usuario_encontrado:
             print("Usuário não encontrado ou senha incorreta.")
     except FileNotFoundError:
@@ -168,13 +166,15 @@ def deletar_usuario(arquivo):
     except Exception as e:
         print("Ocorreu um erro:", e)
 
+
 def cadastrar_locadora():
-    chaves = ["Nome", "CNPJ","Email", "Telefone", "Senha"]
+    chaves = ["Nome", "CNPJ", "Email", "Telefone", "Senha"]
     locadoras = {}
     for chave in chaves:
         dados_locadora = input(f"Digite seu(sua) {chave}: ")
         locadoras[chave] = dados_locadora
     return locadoras
+
 
 def add_usuario(usuario, arquivo):
     try:
@@ -196,10 +196,11 @@ def add_usuario(usuario, arquivo):
     except Exception as e:
         print("Ocorreu um erro: ", e)
 
+
 def add_locadora(locadora, arquivo):
     try:
         with open(arquivo, "r") as f:
-            dados= json.load(f)
+            dados = json.load(f)
     except FileNotFoundError:
         print("Arquivo não encontrado")
     except Exception as e:
@@ -215,6 +216,7 @@ def add_locadora(locadora, arquivo):
         print(f"Locadora {numero_locadoras} cadastrada com sucesso!")
     except Exception as e:
         print("Ocorreu um erro: ", e)
+
 
 def visualizar_locadora(arquivo):
     try:
@@ -243,6 +245,7 @@ def visualizar_locadora(arquivo):
     except Exception as e:
         print("Ocorreu um erro:", e)
 
+
 def atualizar_locadora(arquivo):
     try:
         with open(arquivo, "r+") as f:
@@ -261,8 +264,8 @@ def atualizar_locadora(arquivo):
                         for chave, valor in info.items():
                             print(f"{chave}: {valor}")
                         print("\n==============================\n")
-                        chave = input("Digite a chave que deseja atualizar")
-                        valor = input("Digite a Informação a ser atualizada")
+                        chave = input("Digite a chave que deseja atualizar: ")
+                        valor = input("Digite a Informação a ser atualizada: ")
                         info[chave] = valor
                         f.seek(0)
                         json.dump(locadora, f, indent=4)
@@ -274,6 +277,7 @@ def atualizar_locadora(arquivo):
         print("Arquivo não encontrado")
     except Exception as e:
         print("Ocorreu um erro:", e)
+
 
 def deletar_locadora(arquivo):
     try:
@@ -314,6 +318,7 @@ def deletar_locadora(arquivo):
         print("Arquivo não encontrado")
     except Exception as e:
         print("Ocorreu um erro:", e)
+
 
 def main():
 
