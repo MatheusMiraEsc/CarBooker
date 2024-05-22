@@ -38,6 +38,14 @@ def validar_cpf(cpf):
     return True, ""
 
 
+def validar_cnpj(cnpj):
+    if not cnpj.isdigit():
+        return False, "CPF deve ser composto apenas por números."
+    elif len(cnpj) != 12:
+        return False, "CPF deve ter exatamente 12 caracteres."
+    return True, ""
+
+
 def validar_cnh(cnh):
     if not cnh.isdigit():
         return False, "CNH deve ser composta apenas por números."
