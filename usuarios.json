@@ -3,12 +3,12 @@
         "Nome": "Matheus",
         "Sobrenome": "asds",
         "Data de nascimento": "12/12/2005",
-        "CPF": "10221544437",
+        "CPF": "10221544438",
         "CNH": "123456789",
-        "Genero": "asad",
+        "Genero": "sdasd",
         "Telefone": "81991883498",
         "Email": "matheus@gmail.com",
-        "Senha": "Matheus123*"
+        "Senha": "Matheus345*"
     },
     "Usuario 2": {
         "Nome": "Pessoa",
@@ -20,5 +20,16 @@
         "Telefone": "81991883498",
         "Email": "matheus2@gmail.com",
         "Senha": "Matheus345*"
+    },
+    "Usuario 3": {
+        "Nome": "Matheus",
+        "Sobrenome": "sdasd",
+        "Data de nascimento": "20/5/1935",
+        "CPF": "10221544437",
+        "CNH": "159753456",
+        "Genero": "gjjgg",
+        "Telefone": "81991883498",
+        "Email": "dsvsdv@svs",
+        "Senha": "Matheus123*"
     }
 }

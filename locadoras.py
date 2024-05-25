@@ -185,6 +185,8 @@
 
 import json
 from validação import validar_nome, validar_cnpj, validar_telefone, validar_email, validar_senha
+from util import clear_screen
+from carros import menu_locadora
 
 
 def cadastrar_locadora():
@@ -257,8 +259,9 @@ def menu3(locadora_logada, dados_locadora):
         print(f"Bem-vindo(a), {dados_locadora['Nome']}!")
         print("1. Visualizar locadora")
         print("2. Atualizar informações da locadora")
-        print("3. Deletar locadora")
-        print("4. Voltar")
+        print("3. Carros")
+        print("4. Deletar locadora")
+        print("5. Voltar")
         print("=================================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
@@ -266,9 +269,11 @@ def menu3(locadora_logada, dados_locadora):
         elif opcao == "2":
             atualizar_locadora(arquivo_json, locadora_logada, dados_locadora)
         elif opcao == "3":
+            menu_locadora()
+        elif opcao == "4":
             if deletar_locadora(arquivo_json, locadora_logada, dados_locadora):
                 return
-        elif opcao == "4":
+        elif opcao == "5":
             break
         else:
             print("Opção inválida! Tente novamente\n")
@@ -343,7 +348,3 @@ def deletar_locadora(arquivo, locadora_logada, dados_locadora):
     except Exception as e:
         print("Ocorreu um erro:", e)
     return False
-
-
-def clear_screen():
-    print("\033c", end="")

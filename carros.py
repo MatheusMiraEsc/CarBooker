@@ -2,14 +2,8 @@ import json
 import os
 import validação
 from time import sleep
-
-
+from util import clear_screen
 import json
-from time import sleep
-
-
-def clear_screen():
-    print("\033c", end="")
 
 
 def menu_locadora():
@@ -28,7 +22,7 @@ def menu_locadora():
             carro = cadastrar_carro()
             add_carro(carro, arquivo_json)
         elif opcao == "2":
-            visualizar_carro(arquivo_json)
+            visualizar_carro_locadora(arquivo_json)
         elif opcao == "3":
             atualizar_carro(arquivo_json)
         elif opcao == "4":
@@ -71,7 +65,6 @@ def cadastrar_carro():
             while not contem_letra(dados_carro) or not contem_numero(dados_carro):
                 print(f"{campo} deve conter letras e números.")
                 dados_carro = input(f"Digite o {campo}: ")
-            continue
         carro[campo] = dados_carro
 
     return carro
@@ -98,20 +91,21 @@ def add_carro(carro, arquivo):
         print("Ocorreu um erro: ", e)
 
 
-def visualizar_carro(arquivo):
+def visualizar_carro_usuario(arquivo):
     try:
         with open(arquivo, "r") as f:
             carros = json.load(f)
             modelo = input("Digite o modelo do carro que deseja visualizar: ")
             carro_encontrado = False
             for nome_carro, info in carros.items():
-                if info == modelo:
+                if info["Modelo"] == modelo:
                     carro_encontrado = True
                     print("\n==============================\n")
                     print(nome_carro)
                     for chave, valor in info.items():
                         print(f"{chave}: {valor}")
                     print("\n==============================\n")
+                    input("Pressione Enter para continuar.")
                     break
             if not carro_encontrado:
                 print("\n=====================")
@@ -120,21 +114,51 @@ def visualizar_carro(arquivo):
                 sleep(2)
     except FileNotFoundError:
         print("Arquivo não encontrado")
+        sleep(2)
     except Exception as e:
         print("Ocorreu um erro:", e)
+        sleep(2)
+
+
+def visualizar_carro_locadora(arquivo):
+    try:
+        with open(arquivo, "r") as f:
+            carros = json.load(f)
+            placa = input("Digite placa do carro que deseja visualizar: ")
+            carro_encontrado = False
+            for nome_carro, info in carros.items():
+                if info["Placa"] == placa:
+                    carro_encontrado = True
+                    print("\n==============================\n")
+                    print(nome_carro)
+                    for chave, valor in info.items():
+                        print(f"{chave}: {valor}")
+                    print("\n==============================\n")
+                    input("Pressione Enter para continuar.")
+                    break
+            if not carro_encontrado:
+                print("\n=====================")
+                print("Carro não encontrado.\n")
+                print("=====================")
+                sleep(2)
+    except FileNotFoundError:
+        print("Arquivo não encontrado")
+        input("Pressione Enter para continuar.")
+    except Exception as e:
+        print("Ocorreu um erro:", e)
+        input("Pressione Enter para continuar.")
 
 
 def atualizar_carro(arquivo):
     try:
         with open(arquivo, "r+") as f:
             carros = json.load(f)
-            nome = input("Digite o nome do Carro que deseja atualizar: ")
+            placa = input("Digite a Placa do Carro que deseja atualizar: ")
             carro_encontrado = False
-            for nome_carro, info in carros.items():
-                if nome_carro == nome:
+            for info_carro, info in carros.items():
+                if info_carro["Placa"] == placa:
                     carro_encontrado = True
                     print("\n==============================\n")
-                    print(nome_carro)
                     for chave, valor in info.items():
                         print(f"{chave}: {valor}")
                     print("\n==============================\n")
@@ -144,42 +168,50 @@ def atualizar_carro(arquivo):
                     f.seek(0)
                     json.dump(carros, f, indent=4)
                     print("Carro atualizado com sucesso!")
+                    input("Pressione Enter para continuar.")
                     break
             if not carro_encontrado:
                 print("Carro não encontrado.")
+                input("Pressione Enter para continuar.")
     except FileNotFoundError:
         print("Arquivo não encontrado")
+        input("Pressione Enter para continuar.")
     except Exception as e:
         print("Ocorreu um erro:", e)
+        input("Pressione Enter para continuar.")
 
 
 def deletar_carro(arquivo):
     try:
         with open(arquivo, "r+") as f:
             carros = json.load(f)
-            nome = input("Digite o nome do carro que deseja deletar: ")
+            placa = input("Digite a Placa do carro que deseja deletar: ")
             carro_encontrado = False
-            for nome_carro, info in list(carros.items()):
-                if nome_carro == nome:
+            for info_carro, info in list(carros.items()):
+                if info_carro["Placa"] == placa:
                     carro_encontrado = True
                     print("\n==============================\n")
-                    print(nome_carro)
                     for chave, valor in info.items():
                         print(f"{chave}: {valor}")
                     print("\n==============================\n")
                     conf = input(
                         "Você realmente deseja deletar este carro? (S ou N) -> ")
                     if conf.lower() == "s":
-                        del carros[nome_carro]
+                        del carros[info_carro]
                         print("Carro deletado com sucesso!")
+                        input("Pressione Enter para continuar.")
                     else:
                         print("Exclusão do carro cancelada!")
+                        input("Pressione Enter para continuar.")
                     f.seek(0)
                     json.dump(carros, f, indent=4)
                     break
             if not carro_encontrado:
                 print("Carro não encontrado.")
+                input("Pressione Enter para continuar.")
     except FileNotFoundError:
         print("Arquivo não encontrado")
+        input("Pressione Enter para continuar.")
     except Exception as e:
         print("Ocorreu um erro:", e)
+        input("Pressione Enter para continuar.")

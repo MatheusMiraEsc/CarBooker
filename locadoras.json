@@ -19,5 +19,12 @@
         "Email": "b",
         "Telefone": "a",
         "Senha": "b"
+    },
+    "Locadora 4": {
+        "Nome": "Reciclo",
+        "CNPJ": "920921000109",
+        "Telefone": "81991889785",
+        "Email": "reciclo@gmail.com",
+        "Senha": "Reciclo123*"
     }
 }

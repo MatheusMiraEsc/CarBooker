@@ -1,4 +1,7 @@
+import re
+import json
 from datetime import datetime
+from package_viacep import viacep
 
 
 def validar_nome(nome):
@@ -30,11 +33,28 @@ def validar_data_nascimento(data):
     return True, ""
 
 
-def validar_cpf(cpf):
+def validar_cep(cep):
+    if len(cep) == 8:
+        padrao_cep = re.compile(r'(\d){5}(\d){3}')
+
+        match = padrao_cep.match(cep)
+
+        return True
+
+
+def validar_cpf(cpf, arquivo):
     if not cpf.isdigit():
         return False, "CPF deve ser composto apenas por números."
     elif len(cpf) != 11:
         return False, "CPF deve ter exatamente 11 caracteres."
+    try:
+        with open(arquivo, "r") as f:
+            dados = json.load(f)
+            for usuario in dados.values():
+                if usuario["CPF"] == cpf:
+                    return False, "CPF já cadastrado."
+    except FileNotFoundError:
+        pass
     return True, ""
 
 
