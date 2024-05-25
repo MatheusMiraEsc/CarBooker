@@ -73,7 +73,7 @@ def login(arquivo):
     return None, None
 
 
-def cadastrar_usuario(arquivo):
+def cadastrar_usuario(arquivo, arquivo_end):
     chaves = ["Nome", "Sobrenome", "Data de nascimento",
               "CPF", "CNH", "Genero", "Telefone", "Email", "Senha"]
     validadores = {
@@ -91,6 +91,9 @@ def cadastrar_usuario(arquivo):
     usuarios = {}
     for chave in chaves:
         while True:
+            if chave == "Senha":
+                user = usuarios["CPF"]
+                cadastro_endereço(arquivo_end, user)
             dados_usuario = input(f"Digite seu(sua) {chave}: ")
             valido, mensagem = validadores[chave](dados_usuario)
             if valido:
@@ -103,7 +106,7 @@ def cadastrar_usuario(arquivo):
 
 def add_usuario(usuario, arquivo):
     try:
-        with open(arquivo, "r") as f:
+        with open(arquivo) as f:
             dados = json.load(f)
     except FileNotFoundError:
         dados = {}
@@ -116,6 +119,28 @@ def add_usuario(usuario, arquivo):
         with open(arquivo, "w") as f:
             json.dump(dados, f, indent=4)
         print(f"Usuário {numero_usuarios} cadastrado com sucesso!")
+    except Exception as e:
+        print("Ocorreu um erro: ", e)
+
+
+def cadastro_endereço(arquivo_end, usuario):
+    chaves = ["CEP", "Logradouro", "Complemento", "Bairro", "Localidade", "UF"]
+    endereço = {}
+    for chave in chaves:
+        info_endereço = input(f"Digite o(a) {chave}:")
+        endereço[chave] = info_endereço
+    try:
+        with open(arquivo_end) as f:
+            dados_endereço = json.load(f)
+    except FileNotFoundError:
+        dados_endereço = {}
+
+    cpf = usuario
+    dados_endereço[cpf] = endereço
+
+    try:
+        with open(arquivo_end, "w") as f:
+            json.dump(dados_endereço, f, indent=4)
     except Exception as e:
         print("Ocorreu um erro: ", e)
 

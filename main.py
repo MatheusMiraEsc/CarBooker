@@ -15,6 +15,7 @@ def main():
 
         arquivo_usuario = "usuarios.json"
         arquivo_locadora = "locadoras.json"
+        arquivo_endereço = "endereço.json"
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
@@ -25,7 +26,7 @@ def main():
             print("============================")
             tipo_cadastro = input("Escolha uma opção: ")
             if tipo_cadastro == "1":
-                usuario = cadastrar_usuario(arquivo_usuario)
+                usuario = cadastrar_usuario(arquivo_usuario, arquivo_endereço)
                 add_usuario(usuario, arquivo_usuario)
             elif tipo_cadastro == "2":
                 locadora = cadastrar_locadora()

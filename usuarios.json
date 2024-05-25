@@ -31,5 +31,16 @@
         "Telefone": "81991883498",
         "Email": "dsvsdv@svs",
         "Senha": "Matheus123*"
+    },
+    "Usuario 4": {
+        "Nome": "asd",
+        "Sobrenome": "sad",
+        "Data de nascimento": "10/10/2004",
+        "CPF": "12345678910",
+        "CNH": "123456789",
+        "Genero": "dsads",
+        "Telefone": "81991883198",
+        "Email": "matheus@gmail.com",
+        "Senha": "Matheus123*"
     }
 }
