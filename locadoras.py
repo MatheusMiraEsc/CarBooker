@@ -5,6 +5,7 @@ from util import clear_screen
 from carros import menu_locadora
 from time import sleep
 from endereço import cadastro_endereço_locadora
+from reserva import menu_locadora_reserva
 
 
 def cadastrar_locadora(arquivo, arquivoEnd):
@@ -90,8 +91,9 @@ def menu3(locadora_logada, dados_locadora):
         print("1. Visualizar locadora")
         print("2. Atualizar informações da locadora")
         print("3. Carros")
-        print("4. Deletar locadora")
-        print("5. Voltar")
+        print("4. Reservas")
+        print("5. Deletar locadora")
+        print("6. Voltar")
         print("=================================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
@@ -101,9 +103,11 @@ def menu3(locadora_logada, dados_locadora):
         elif opcao == "3":
             menu_locadora(dados_locadora)
         elif opcao == "4":
+            menu_locadora_reserva(locadora_logada, dados_locadora)
+        elif opcao == "5":
             if deletar_locadora(arquivo_json, locadora_logada, dados_locadora):
                 return
-        elif opcao == "5":
+        elif opcao == "6":
             break
         else:
             print("Opção inválida! Tente novamente\n")

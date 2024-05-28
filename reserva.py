@@ -42,6 +42,32 @@ def menu_usuario_reserva(usuario_logado, dados_usuario):
             sleep(2)
 
 
+def menu_locadora_reserva(locadora_logada, dados_locadora):
+    arquivo_usuario = "usuarios.json"
+    arquivo_carros = "carros.json"
+    arquivo_reservas = "reservas.json"
+    while True:
+        clear_screen()
+        print("============================")
+        print("1. Checar reservas")
+        print("2. Cancelar reserva")
+        print("3. Voltar")
+        print("============================")
+        opcao2 = input("Escolha uma opção: ")
+        if opcao2 == "1":
+            checar_reservas_locadora(arquivo_reservas, dados_locadora)
+        elif opcao2 == "2":
+            cancelar_reserva(arquivo_reservas, arquivo_carros, locadora_logada,
+                             dados_locadora)
+            sleep(2)
+        elif opcao2 == "3":
+            break
+        else:
+            clear_screen()
+            print("Opção inválida! Tente novamente\n")
+            sleep(2)
+
+
 def confirmacao_reserva(arquivo, usuario):
     try:
         with open(arquivo) as f:
@@ -148,6 +174,36 @@ def checar_reserva(arquivo, usuario):
             for chaves, info in dados.items():
                 print(f"{chaves}: {info}")
             print("\n==============================\n")
+    input("Pressione Enter para continuar.")
+
+
+def checar_reservas_locadora(arquivo, dados_locadora):
+    try:
+        with open(arquivo, "r") as f:
+            reservas = json.load(f)
+    except FileNotFoundError:
+        print("Arquivo de reservas não encontrado.")
+        return
+    except json.JSONDecodeError:
+        print("Erro ao ler o arquivo de reservas.")
+        return
+
+    reservas_encontradas = False
+    for chave, dados in reservas.items():
+        if dados.get("CNPJ da locadora") == dados_locadora.get("CNPJ"):
+            if not reservas_encontradas:
+                print("\n==============================")
+                print("Reservas feitas:")
+                reservas_encontradas = True
+
+            print("\n==============================\n")
+            for chaves, info in dados.items():
+                print(f"{chaves}: {info}")
+            print("\n==============================\n")
+
+    if not reservas_encontradas:
+        print("Nenhuma reserva encontrada.")
+
     input("Pressione Enter para continuar.")
 
 

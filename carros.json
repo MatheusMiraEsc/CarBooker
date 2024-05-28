@@ -19,7 +19,7 @@
         "Tipo combustivel": "dsda"
     },
     "Carro 2": {
-        "Locadora": "Reciclo",
+        "Locadora": "reciclobikes",
         "CNPJ da locadora": "920921000109",
         "Status reserva": "Reservado",
         "Modelo": "ethios",

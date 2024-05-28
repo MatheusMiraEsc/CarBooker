@@ -30,6 +30,7 @@ def menu_locadora(dadosLocadora):
         elif opcao == "5":
             break
         else:
+            clear_screen()
             print("\n====================================")
             print("Opção inválida! Tente novamente\n")
             print("====================================")
