@@ -14,5 +14,29 @@
         "Bairro": "sdas",
         "Localidade": "asdsa",
         "UF": "asdas"
+    },
+    "10321544437": {
+        "CEP": "159",
+        "Logradouro": "",
+        "Complemento": "dc",
+        "Bairro": "",
+        "Localidade": "",
+        "UF": ""
+    },
+    "35119357415": {
+        "CEP": "",
+        "Logradouro": "",
+        "Complemento": "",
+        "Bairro": "",
+        "Localidade": "",
+        "UF": ""
+    },
+    "12378945602": {
+        "CEP": "",
+        "Logradouro": "Recife",
+        "Complemento": "Casa",
+        "Bairro": "Casa forte",
+        "Localidade": "Recife",
+        "UF": "PE"
     }
 }

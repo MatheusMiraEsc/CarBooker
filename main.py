@@ -20,7 +20,8 @@ def main():
 
         if opcao == "1":
             clear_screen()
-            print("\n1. Cadastro de Usuário")
+            print("============================")
+            print("1. Cadastro de Usuário")
             print("2. Cadastro de Locadora")
             print("3. Voltar")
             print("============================")
@@ -29,7 +30,8 @@ def main():
                 usuario = cadastrar_usuario(arquivo_usuario, arquivo_endereço)
                 add_usuario(usuario, arquivo_usuario)
             elif tipo_cadastro == "2":
-                locadora = cadastrar_locadora()
+                locadora = cadastrar_locadora(
+                    arquivo_locadora, arquivo_endereço)
                 add_locadora(locadora, arquivo_locadora)
             elif tipo_cadastro == "3":
                 print("")
@@ -40,7 +42,7 @@ def main():
         elif opcao == "2":
             clear_screen()
             print("============================")
-            print("\n1. Login de Usuário")
+            print("1. Login de Usuário")
             print("2. Login de Locadora")
             print("3. Voltar")
             print("============================")

@@ -5,13 +5,14 @@ from datetime import datetime
 from validação import validar_nome, validar_sobrenome, validar_data_nascimento, validar_cpf, validar_cnh, validar_genero, validar_telefone, validar_email, validar_senha
 from util import clear_screen
 from carros import visualizar_carro_usuario
-
-import json
+from reserva import fazerReserva, checar_reserva, alterar_reserva, cancelar_reserva, menu_usuario_reserva
+from endereço import cadastro_endereço_usuario
 
 
 def menu2(usuario_logado, dados_usuario):
-    arquivo_json = "usuarios.json"
+    arquivo_usuario = "usuarios.json"
     arquivo_carros = "carros.json"
+    arquivo_reservas = "reservas.json"
     while True:
         clear_screen()
         print("\n=================================")
@@ -24,29 +25,16 @@ def menu2(usuario_logado, dados_usuario):
         print("=================================")
         opcao1 = input("Escolha uma opção: ")
         if opcao1 == "1":
-            visualizar_usuario(dados_usuario)
+            visualizar_usuario(usuario_logado, arquivo_usuario)
         elif opcao1 == "2":
-            atualizar_usuario(arquivo_json, usuario_logado, dados_usuario)
+            atualizar_usuario(arquivo_usuario, usuario_logado, dados_usuario)
         elif opcao1 == "3":
-            print("============================")
-            print("1. Carros disponíveis")
-            print("2. Fazer reserva")
-            print("3. Voltar")
-            print("============================")
-            opcao2 = input("Escolha uma opção: ")
-            if opcao2 == "1":
-                visualizar_carro_usuario(arquivo_carros)
-            elif opcao2 == "2":
-                print("Funcionlidade será disponibilizada em breve. ")
-                sleep(2)
-            elif opcao2 == "3":
-                break
-            else:
-                print("Opção inválida! Tente novamente\n")
-                sleep(2)
+            menu_usuario_reserva(usuario_logado, dados_usuario)
         elif opcao1 == "4":
-            deletar_usuario(arquivo_json, usuario_logado, dados_usuario)
-            break
+            usuario_deletado = deletar_usuario(
+                arquivo_usuario, usuario_logado, dados_usuario)
+            if usuario_deletado:
+                break
         elif opcao1 == "5":
             break
         else:
@@ -60,16 +48,25 @@ def login(arquivo):
             usuarios = json.load(f)
     except FileNotFoundError:
         print("Arquivo de usuários não encontrado.")
-        return None
-
-    cpf = input("Digite seu CPF: ")
-    for chaves_usuario, dados in usuarios.items():
-        if dados["CPF"] == cpf:
-            senha = input("Digite a sua senha: ")
-            if dados["Senha"] == senha:
-                print("Login bem-sucedido!")
-            return chaves_usuario, dados
-    print("CPF ou senha incorretos.")
+        return None, None
+    while True:
+        email = input("Digite seu Email ou aperte enter para voltar: ")
+        if email == "":
+            return None, None
+        email_encontrado = False
+        for chaves_usuario, dados in usuarios.items():
+            if dados["Email"] == email:
+                email_encontrado = True
+                senha = input("Digite a sua senha: ")
+                if dados["Senha"] == senha:
+                    print("Login bem-sucedido!")
+                    sleep(2)
+                    return chaves_usuario, dados
+                else:
+                    print("Senha incorreta.")
+                    break
+        if not email_encontrado:
+            print("CPF incorreto ou não cadastrado.")
     return None, None
 
 
@@ -84,16 +81,18 @@ def cadastrar_usuario(arquivo, arquivo_end):
         "CNH": validar_cnh,
         "Genero": validar_genero,
         "Telefone": validar_telefone,
-        "Email": validar_email,
+        "Email": lambda email: validar_email(email, arquivo),
         "Senha": validar_senha
     }
 
     usuarios = {}
+    verificar_endereço = False
     for chave in chaves:
         while True:
-            if chave == "Senha":
+            if chave == "Senha" and verificar_endereço == False:
                 user = usuarios["CPF"]
-                cadastro_endereço(arquivo_end, user)
+                cadastro_endereço_usuario(arquivo_end, user)
+                verificar_endereço = True
             dados_usuario = input(f"Digite seu(sua) {chave}: ")
             valido, mensagem = validadores[chave](dados_usuario)
             if valido:
@@ -123,33 +122,15 @@ def add_usuario(usuario, arquivo):
         print("Ocorreu um erro: ", e)
 
 
-def cadastro_endereço(arquivo_end, usuario):
-    chaves = ["CEP", "Logradouro", "Complemento", "Bairro", "Localidade", "UF"]
-    endereço = {}
-    for chave in chaves:
-        info_endereço = input(f"Digite o(a) {chave}:")
-        endereço[chave] = info_endereço
-    try:
-        with open(arquivo_end) as f:
-            dados_endereço = json.load(f)
-    except FileNotFoundError:
-        dados_endereço = {}
-
-    cpf = usuario
-    dados_endereço[cpf] = endereço
-
-    try:
-        with open(arquivo_end, "w") as f:
-            json.dump(dados_endereço, f, indent=4)
-    except Exception as e:
-        print("Ocorreu um erro: ", e)
-
-
-def visualizar_usuario(dados_usuario):
-    print("\n==============================\n")
-    for chaves, info in dados_usuario.items():
-        print(f"{chaves}: {info}")
-    print("\n==============================\n")
+def visualizar_usuario(usuario_logado, arquivo):
+    with open(arquivo) as f:
+        usuario = json.load(f)
+    for user, valores in usuario.items():
+        if user == usuario_logado:
+            print("\n==============================\n")
+            for chaves, info in valores.items():
+                print(f"{chaves}: {info}")
+            print("\n==============================\n")
     input("Pressione Enter para continuar.")
 
 
@@ -168,7 +149,6 @@ def atualizar_usuario(arquivo, usuario_logado, dados_usuario):
                 input("Digite o número da chave que deseja atualizar: "))
             if chave_num < 1 or chave_num > len(usuario_atual):
                 print("Número inválido.")
-                return
 
             chave = list(usuario_atual.keys())[chave_num - 1]
             valor = input(f"Digite a nova informação para {chave}: ")

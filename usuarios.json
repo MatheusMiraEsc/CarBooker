@@ -7,7 +7,7 @@
         "CNH": "123456789",
         "Genero": "sdasd",
         "Telefone": "81991883498",
-        "Email": "matheus@gmail.com",
+        "Email": "matheus1@gmail.com",
         "Senha": "Matheus345*"
     },
     "Usuario 2": {
@@ -42,5 +42,27 @@
         "Telefone": "81991883198",
         "Email": "matheus@gmail.com",
         "Senha": "Matheus123*"
+    },
+    "Usuario 5": {
+        "Nome": "Matheus",
+        "Sobrenome": "Escorel",
+        "Data de nascimento": "10/10/2005",
+        "CPF": "10321544437",
+        "CNH": "123456789",
+        "Genero": "fas",
+        "Telefone": "81991883498",
+        "Email": "matheus@gmai.com",
+        "Senha": "Matheus123*"
+    },
+    "Usuario 6": {
+        "Nome": "Ana Maria",
+        "Sobrenome": "Escorel",
+        "Data de nascimento": "19/09/1961",
+        "CPF": "35119357415",
+        "CNH": "159111985",
+        "Genero": "fem",
+        "Telefone": "81999138571",
+        "Email": "aescorel@yahoo.com",
+        "Senha": "Ma9913#"
     }
 }

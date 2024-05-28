@@ -1,207 +1,28 @@
-# import json
-# import os
-# import locadoras
-# from time import sleep
-
-
-# def clear_screen():
-#     print("\033c", end="")
-
-
-# def menu3():
-#     arquivo_json = "locadoras.json"
-#     while True:
-#         clear_screen()
-#         print("\n=================================")
-#         print("1. Visualizar Locadora")
-#         print("2. Atualizar informações da Locadora")
-#         print("3. Deletar Locadora")
-#         print("4. Voltar")
-#         print("=================================")
-#         opcao = input("Escolha uma opção: ")
-#         if opcao == "1":
-#             visualizar_locadora(arquivo_json)
-#         elif opcao == "2":
-#             atualizar_locadora(arquivo_json)
-#         elif opcao == "3":
-#             deletar_locadora(arquivo_json)
-#         elif opcao == "4":
-#             break
-#         else:
-#             print("Opção inválida! Tente novamente\n")
-#             sleep(4)
-
-
-# def login_locadora(arquivo):
-#     try:
-#         with open(arquivo, "r") as f:
-#             locadoras = json.load(f)
-#     except FileNotFoundError:
-#         print("Arquivo de locadoras não encontrado.")
-#         return None
-
-#     cnpj = input("Digite o CNPJ da locadora: ")
-
-#     for nome_locadora, dados in locadoras.items():
-#         if dados["CNPJ"] == cnpj:
-#             senha = input("Digite a senha da locadora: ")
-#             if dados["Senha"] == senha:
-#                 print("Login bem-sucedido!")
-#                 return nome_locadora, dados
-#     print("CNPJ ou senha incorretos.")
-#     return None, None
-
-
-# def cadastrar_locadora():
-#     chaves = ["Nome", "CNPJ", "Email", "Telefone", "Senha"]
-#     locadoras = {}
-#     for chave in chaves:
-#         dados_locadora = input(f"Digite seu(sua) {chave}: ")
-#         locadoras[chave] = dados_locadora
-#     return locadoras
-
-
-# def add_locadora(locadora, arquivo):
-#     try:
-#         with open(arquivo, "r") as f:
-#             dados = json.load(f)
-#     except FileNotFoundError:
-#         print("Arquivo não encontrado")
-#     except Exception as e:
-#         print("Ocorreu um erro: ", e)
-
-#     numero_locadoras = len(dados)+1
-#     nome_locadora = f"  Locadora {numero_locadoras}"
-#     dados[nome_locadora] = locadora
-
-#     try:
-#         with open(arquivo, "w") as f:
-#             json.dump(dados, f, indent=4)
-#         print(f"Locadora {numero_locadoras} cadastrada com sucesso!")
-#     except Exception as e:
-#         print("Ocorreu um erro: ", e)
-
-
-# def visualizar_locadora(arquivo):
-#     try:
-#         with open(arquivo, "r") as f:
-#             locadora = json.load(f)
-#             numero_locadoras = len(locadora)
-#             nome_locadora = f"Locadora {numero_locadoras}"
-#         cnpj = input(
-#             "Digite o CNPJ da locadora que deseja visualizar: ")
-#         locadora_encontrada = False
-#         for dados, info in locadora.items():
-#             if info["CNPJ"] == cnpj:
-#                 senha = input("Digite a sua senha: ")
-#                 if info["Senha"] == senha:
-#                     locadora_encontrada = True
-#                     print("\n==============================\n")
-#                     print(nome_locadora)
-#                     for chave, valor in info.items():
-#                         print(f"{chave}:{valor}")
-#                     print("\n==============================\n")
-#                     break
-#         if not locadora_encontrada:
-#             print("Locadora não encontrada.")
-#     except FileNotFoundError:
-#         print("Arquivo não encontrado")
-#     except Exception as e:
-#         print("Ocorreu um erro:", e)
-
-
-# def atualizar_locadora(arquivo):
-#     try:
-#         with open(arquivo, "r+") as f:
-#             locadora = json.load(f)
-#             numero_locadoras = len(locadora)
-#             nome_locadora = f"Locadora {numero_locadoras}"
-#             nome = input("Digite o nome da Locadora que dejesa atualizar: ")
-#             locadora_encontrada = False
-#             for dados, info in locadora.items():
-#                 if info["Nome"] == nome:
-#                     senha = input("Digite a sua senha: ")
-#                     if info["Senha"] == senha:
-#                         locadora_encontrada = True
-#                         print("\n==============================\n")
-#                         print(nome_locadora)
-#                         for chave, valor in info.items():
-#                             print(f"{chave}: {valor}")
-#                         print("\n==============================\n")
-#                         chave = input("Digite a chave que deseja atualizar: ")
-#                         valor = input("Digite a Informação a ser atualizada: ")
-#                         info[chave] = valor
-#                         f.seek(0)
-#                         json.dump(locadora, f, indent=4)
-#                         print("Usuário atualizado com sucesso!")
-#                         break
-#         if not locadora_encontrada:
-#             print("Locadora não encontrada ou senha incorreta.")
-#     except FileNotFoundError:
-#         print("Arquivo não encontrado")
-#     except Exception as e:
-#         print("Ocorreu um erro:", e)
-
-
-# def deletar_locadora(arquivo):
-#     try:
-#         with open(arquivo, "r+") as f:
-#             locadora = json.load(f)
-#             numero_locadoras = len(locadora)
-#             nome_locadora = f"Locadora {numero_locadoras}"
-#             nome = input(
-#                 "Digite o nome da locadora que deseja deletar: ")
-#             locadora_encontrada = False
-#             for dados, info in list(locadora.items()):
-#                 if info["Nome"] == nome:
-#                     senha = input("Digite a sua senha: ")
-#                     if info["Senha"] == senha:
-#                         locadora_encontrada = True
-#                         print("\n==============================\n")
-#                         print(nome_locadora)
-#                         for chave, valor in info.items():
-#                             print(f"{chave}: {valor}")
-#                         print("\n==============================\n")
-#                         conf = input(
-#                             "Você realmente deseja deletar seu perfil? (S ou N) -> ")
-#                         if conf.lower() == "s":
-#                             del locadora[dados]
-#                             print("Locadora deletada com sucesso!")
-#                         else:
-#                             print("Exclusão da locadora cancelada!")
-#                             break
-#                     f.seek(0)
-#                     json.dump(locadora, f, indent=4)
-#                     break
-#         if not locadora_encontrada:
-#             print("Locadora não encontrada ou senha incorreta. ")
-#         else:
-#             with open(arquivo, "w") as f:
-#                 json.dump(locadora, f, indent=4)
-#     except FileNotFoundError:
-#         print("Arquivo não encontrado")
-#     except Exception as e:
-#         print("Ocorreu um erro:", e)
 
 import json
 from validação import validar_nome, validar_cnpj, validar_telefone, validar_email, validar_senha
 from util import clear_screen
 from carros import menu_locadora
+from time import sleep
+from endereço import cadastro_endereço_locadora
 
 
-def cadastrar_locadora():
+def cadastrar_locadora(arquivo, arquivoEnd):
     chaves = ["Nome", "CNPJ", "Telefone", "Email", "Senha"]
     validadores = {
         "Nome": validar_nome,
-        "CNPJ": validar_cnpj,
+        "CNPJ": lambda cnpj: validar_cnpj(cnpj, arquivo),
         "Telefone": validar_telefone,
-        "Email": validar_email,
+        "Email": lambda email: validar_email(email, arquivo),
         "Senha": validar_senha
     }
 
     locadora = {}
     for chave in chaves:
         while True:
+            if chave == "Senha":
+                user = locadora["CNPJ"]
+                cadastro_endereço_locadora(arquivoEnd, user)
             dados_locadora = input(f"Digite o(a) {chave} da locadora: ")
             valido, mensagem = validadores[chave](dados_locadora)
             if valido:
@@ -238,16 +59,25 @@ def login_locadora(arquivo):
     except FileNotFoundError:
         print("Arquivo de locadoras não encontrado.")
         return None
-
-    cnpj = input("Digite o CNPJ da locadora: ")
-
-    for nome_locadora, dados in locadoras.items():
-        if dados["CNPJ"] == cnpj:
-            senha = input("Digite a senha da locadora: ")
-            if dados["Senha"] == senha:
-                print("Login bem-sucedido!")
-                return nome_locadora, dados
-    print("CNPJ ou senha incorretos.")
+    while True:
+        email = input(
+            "Digite o Email da locadora ou aperte enter para voltar: ")
+        if email == "":
+            return None, None
+        email_encontrado = False
+        for nome_locadora, dados in locadoras.items():
+            if dados["Email"] == email:
+                email_encontrado = True
+                senha = input("Digite a senha da locadora: ")
+                if dados["Senha"] == senha:
+                    print("Login bem-sucedido!")
+                    sleep(2)
+                    return nome_locadora, dados
+                else:
+                    print("Senha incorreta.")
+                    break
+        if not email_encontrado:
+            print("CNPJ incorreto ou não cadastrado.")
     return None, None
 
 
@@ -265,11 +95,11 @@ def menu3(locadora_logada, dados_locadora):
         print("=================================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
-            visualizar_locadora(dados_locadora)
+            visualizar_locadora(locadora_logada, arquivo_json)
         elif opcao == "2":
             atualizar_locadora(arquivo_json, locadora_logada, dados_locadora)
         elif opcao == "3":
-            menu_locadora()
+            menu_locadora(dados_locadora)
         elif opcao == "4":
             if deletar_locadora(arquivo_json, locadora_logada, dados_locadora):
                 return
@@ -279,12 +109,16 @@ def menu3(locadora_logada, dados_locadora):
             print("Opção inválida! Tente novamente\n")
 
 
-def visualizar_locadora(dados_locadora):
-    print("\n==============================\n")
-    for chave, valor in dados_locadora.items():
-        print(f"{chave}: {valor}")
-    print("\n==============================\n")
-    input("Digite 1 para voltar-->")
+def visualizar_locadora(locadora_logada, arquivo):
+    with open(arquivo) as f:
+        locadora = json.load(f)
+    for user, valores in locadora.items():
+        if user == locadora_logada:
+            print("\n==============================\n")
+            for chaves, info in valores.items():
+                print(f"{chaves}: {info}")
+            print("\n==============================\n")
+    input("Pressione Enter para continuar.")
 
 
 def atualizar_locadora(arquivo, locadora_logada, dados_locadora):

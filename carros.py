@@ -6,7 +6,7 @@ from util import clear_screen
 import json
 
 
-def menu_locadora():
+def menu_locadora(dadosLocadora):
     arquivo_json = "carros.json"
     while True:
         clear_screen()
@@ -19,7 +19,7 @@ def menu_locadora():
         print("=================================")
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
-            carro = cadastrar_carro()
+            carro = cadastrar_carro(dadosLocadora)
             add_carro(carro, arquivo_json)
         elif opcao == "2":
             visualizar_carro_locadora(arquivo_json)
@@ -44,13 +44,16 @@ def contem_letra(s):
     return any(char.isalpha() for char in s)
 
 
-def cadastrar_carro():
+def cadastrar_carro(locadora):
 
     campos = ["Modelo", "Marca", "ID Chassis", "Numero de portas", "Ano", "Categoria",
               "Placa", "Capacidade mala", "Capacidade combustivel", "Capacidade passageiro",
               "Quilometragem", "Cambio", "Cor", "Tipo combustivel"]
 
     carro = {}
+    carro["Locadora"] = locadora["Nome"]
+    carro["CNPJ da locadora"] = locadora["CNPJ"]
+
     for campo in campos:
         dados_carro = input(f"Digite o(a) {campo}: ")
         if campo == "Numero de portas" or campo == "Ano" or campo == "Capacidade mala" or campo == "Capacidade combustivel" or campo == "Capacidade passageiro" or campo == "Quilometragem":
@@ -65,6 +68,7 @@ def cadastrar_carro():
             while not contem_letra(dados_carro) or not contem_numero(dados_carro):
                 print(f"{campo} deve conter letras e números.")
                 dados_carro = input(f"Digite o {campo}: ")
+        carro["Status reserva"] = "Disponivel"
         carro[campo] = dados_carro
 
     return carro
@@ -105,8 +109,7 @@ def visualizar_carro_usuario(arquivo):
                     for chave, valor in info.items():
                         print(f"{chave}: {valor}")
                     print("\n==============================\n")
-                    input("Pressione Enter para continuar.")
-                    break
+                input("Pressione Enter para continuar.")
             if not carro_encontrado:
                 print("\n=====================")
                 print("Carro não encontrado.\n")
@@ -135,7 +138,6 @@ def visualizar_carro_locadora(arquivo):
                         print(f"{chave}: {valor}")
                     print("\n==============================\n")
                     input("Pressione Enter para continuar.")
-                    break
             if not carro_encontrado:
                 print("\n=====================")
                 print("Carro não encontrado.\n")
@@ -169,7 +171,6 @@ def atualizar_carro(arquivo):
                     json.dump(carros, f, indent=4)
                     print("Carro atualizado com sucesso!")
                     input("Pressione Enter para continuar.")
-                    break
             if not carro_encontrado:
                 print("Carro não encontrado.")
                 input("Pressione Enter para continuar.")
@@ -205,7 +206,6 @@ def deletar_carro(arquivo):
                         input("Pressione Enter para continuar.")
                     f.seek(0)
                     json.dump(carros, f, indent=4)
-                    break
             if not carro_encontrado:
                 print("Carro não encontrado.")
                 input("Pressione Enter para continuar.")

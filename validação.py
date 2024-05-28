@@ -1,7 +1,7 @@
 import re
 import json
 from datetime import datetime
-from package_viacep import viacep
+# from package_viacep import viacep
 
 
 def validar_nome(nome):
@@ -90,11 +90,19 @@ def validar_telefone(telefone):
     return True, ""
 
 
-def validar_email(email):
+def validar_email(email, arquivo):
     if '@' not in email:
         return False, "Email deve conter '@'."
     elif len(email) == 0:
         return False, "Email não pode ficar vazio."
+    try:
+        with open(arquivo, "r") as f:
+            dados = json.load(f)
+            for usuario in dados.values():
+                if usuario["Email"] == email:
+                    return False, "Email já cadastrado."
+    except FileNotFoundError:
+        pass
     return True, ""
 
 
@@ -105,6 +113,24 @@ def validar_senha(senha):
     has_lower = any(c.islower() for c in senha)
     has_digit = any(c.isdigit() for c in senha)
     has_symbol = any(not c.isalnum() for c in senha)
-    if not (has_upper and has_lower and has_digit and has_symbol):
-        return False, "Senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um símbolo."
+    if not has_upper:
+        return False, "Senha deve conter pelo menos uma letra maiúscula."
+    elif not has_lower:
+        return False, "Senha deve conter pelo menos uma letra minúscular."
+    elif not has_digit:
+        return False, "Senha deve conter pelo menos um número."
+    elif not has_symbol:
+        return False, "Senha deve conter pelo menos um símbolo."
     return True, ""
+
+
+def validar_cnpj(cnpj):
+    if not len(cnpj) != 14:
+        return False, "CNPJ deve conter 14 dígitos."
+    elif len(cnpj) == 0:
+        return False, "CNPJ não pode ficar vazio"
+    elif not cnpj.isdigit():
+        return False, "CNPJ deve conter apenas números"
+    else:
+        print("CNPJ inválido. Por favor, insira um CNPJ válido.")
+        return False
