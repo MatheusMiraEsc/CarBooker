@@ -17,6 +17,16 @@
         "CPF": "12345678901",
         "CNH": "123456789",
         "Genero": "sd",
+        "Endereco": [
+            {
+                "CEP": "",
+                "Logradouro": "",
+                "Complemento": "",
+                "Bairro": "",
+                "Localidade": "",
+                "UF": ""
+            }
+        ],
         "Telefone": "81991883498",
         "Email": "matheus2@gmail.com",
         "Senha": "Matheus345*"
@@ -49,7 +59,7 @@
         "Data de nascimento": "10/10/2005",
         "CPF": "10321544437",
         "CNH": "123456789",
-        "Genero": "fas",
+        "Genero": "saas",
         "Telefone": "81991883498",
         "Email": "matheus@gmai.com",
         "Senha": "Matheus123*"
@@ -64,5 +74,132 @@
         "Telefone": "81999138571",
         "Email": "aescorel@yahoo.com",
         "Senha": "Ma9913#"
+    },
+    "Usuario 7": {
+        "Nome": "teste",
+        "Sobrenome": "teste",
+        "Data de nascimento": "22/10/2003",
+        "CPF": "10446021166",
+        "CNH": "123456789",
+        "Genero": "a",
+        "Telefone": "81998076612",
+        "Email": "teste@gmail.com",
+        "Senha": "Teste@123!",
+        "Enderecos": [
+            {
+                "CEP": "51032421",
+                "Rua": "teste",
+                "Complemento": "teste",
+                "Bairro": "teste",
+                "Cidade": "teste",
+                "UF": "teste"
+            }
+        ]
+    },
+    "Usuario 8": {
+        "Nome": "TESTE",
+        "Sobrenome": "teste",
+        "Data de nascimento": "22/10/2003",
+        "CPF": "10446023120",
+        "CNH": "123456789",
+        "Genero": "teste",
+        "Telefone": "81998072212",
+        "Email": "teste@aa.com",
+        "Senha": "Ta2!",
+        "Enderecos": [
+            {
+                "CEP": "5201023",
+                "Rua": "teste",
+                "Complemento": "a",
+                "Bairro": "a",
+                "Cidade": "a",
+                "UF": "a"
+            },
+            {
+                "CEP": "b",
+                "Rua": "b",
+                "Complemento": "b",
+                "Bairro": "c",
+                "Cidade": "d",
+                "UF": "sa"
+            }
+        ]
+    },
+    "Usuario 9": {
+        "Nome": "Matheus",
+        "Sobrenome": "Escorel",
+        "Data de nascimento": "12/07/2003",
+        "CPF": "10225544437",
+        "CNH": "123456789",
+        "Genero": "ewf",
+        "Telefone": "81991883498",
+        "Email": "mme@gmail.com",
+        "Senha": "Matheus123#",
+        "Enderecos": [
+            {
+                "CEP": "52061080",
+                "Rua": "qwe",
+                "Complemento": "qwe",
+                "Bairro": "qwe",
+                "Cidade": "qwe",
+                "UF": "89"
+            }
+        ]
+    },
+    "Usuario 10": {
+        "Nome": "teste",
+        "Sobrenome": "teste",
+        "Data de nascimento": "10/11/2003",
+        "CPF": "10221144432",
+        "CNH": "123456789",
+        "Telefone": "81991883498",
+        "Email": "mat@gmail.com",
+        "Senha": "Ma123#",
+        "Enderecos": [
+            {
+                "CEP": "52061080",
+                "Rua": "pedreiro",
+                "Complemento": "alsls",
+                "Bairro": "sda",
+                "Cidade": "ere",
+                "UF": "re"
+            },
+            {
+                "CEP": "787asd",
+                "Rua": "da",
+                "Complemento": "d",
+                "Bairro": "d",
+                "Cidade": "ssd",
+                "UF": "sa"
+            }
+        ]
+    },
+    "Usuario 11": {
+        "Nome": "Pedro",
+        "Sobrenome": "Augusto",
+        "Data de nascimento": "20/12/2004",
+        "CPF": "09216738413",
+        "CNH": "123456789",
+        "Telefone": "81997180303",
+        "Email": "pedsroj@|gmai.com",
+        "Senha": "Pedro12!",
+        "Enderecos": [
+            {
+                "CEP": "51160000",
+                "Rua": "rua bosta",
+                "Complemento": "3",
+                "Bairro": "revife",
+                "Cidade": "pernambuco",
+                "UF": "pe"
+            },
+            {
+                "CEP": "21837813",
+                "Rua": "O",
+                "Complemento": "a",
+                "Bairro": "3",
+                "Cidade": "Mao",
+                "UF": "Pe"
+            }
+        ]
     }
 }

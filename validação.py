@@ -74,12 +74,6 @@ def validar_cnh(cnh):
     return True, ""
 
 
-def validar_genero(genero):
-    if not genero.isalpha():
-        return False, "Gênero deve ser composto apenas por letras."
-    return True, ""
-
-
 def validar_telefone(telefone):
     if not telefone.isdigit():
         return False, "Telefone deve ser composto apenas por números."
@@ -127,10 +121,6 @@ def validar_senha(senha):
 def validar_cnpj(cnpj):
     if not len(cnpj) != 14:
         return False, "CNPJ deve conter 14 dígitos."
-    elif len(cnpj) == 0:
-        return False, "CNPJ não pode ficar vazio"
     elif not cnpj.isdigit():
         return False, "CNPJ deve conter apenas números"
-    else:
-        print("CNPJ inválido. Por favor, insira um CNPJ válido.")
-        return False
+    return True, ""

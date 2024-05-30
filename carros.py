@@ -1,9 +1,8 @@
 import json
-import os
-import validação
 from time import sleep
 from util import clear_screen
 import json
+from tabulate import tabulate
 
 
 def menu_locadora(dadosLocadora):
@@ -102,20 +101,28 @@ def visualizar_carro_usuario(arquivo):
             carros = json.load(f)
             modelo = input("Digite o modelo do carro que deseja visualizar: ")
             carro_encontrado = False
+            tabela = []
+
             for nome_carro, info in carros.items():
                 if info["Modelo"] == modelo:
                     carro_encontrado = True
-                    print("\n==============================\n")
-                    print(nome_carro)
+                    tabela.append(("Nome do Carro", nome_carro))
                     for chave, valor in info.items():
-                        print(f"{chave}: {valor}")
-                    print("\n==============================\n")
-                input("Pressione Enter para continuar.")
-            if not carro_encontrado:
-                print("\n=====================")
-                print("Carro não encontrado.\n")
-                print("=====================")
-                sleep(2)
+                        tabela.append((chave, valor))
+                    break
+
+        if carro_encontrado:
+            print("\n==============================\n")
+            print(tabulate(tabela, headers=[
+                  "Campo", "Informação"], tablefmt="grid"))
+            print("\n==============================\n")
+            input("Pressione Enter para continuar.")
+        if not carro_encontrado:
+            clear_screen()
+            print("\n=====================")
+            print("Carro não encontrado.")
+            print("=====================")
+            sleep(2)
     except FileNotFoundError:
         print("Arquivo não encontrado")
         sleep(2)
@@ -128,27 +135,41 @@ def visualizar_carro_locadora(arquivo):
     try:
         with open(arquivo, "r") as f:
             carros = json.load(f)
-            placa = input("Digite placa do carro que deseja visualizar: ")
-            carro_encontrado = False
-            for nome_carro, info in carros.items():
-                if info["Placa"] == placa:
-                    carro_encontrado = True
-                    print("\n==============================\n")
-                    print(nome_carro)
-                    for chave, valor in info.items():
-                        print(f"{chave}: {valor}")
-                    print("\n==============================\n")
-                    input("Pressione Enter para continuar.")
-            if not carro_encontrado:
-                print("\n=====================")
-                print("Carro não encontrado.\n")
-                print("=====================")
-                sleep(2)
+
+        placa = input("Digite a placa do carro que deseja visualizar: ")
+        carro_encontrado = False
+        tabela = []
+
+        for nome_carro, info in carros.items():
+            if info["Placa"] == placa:
+                carro_encontrado = True
+                tabela.append(("Nome do Carro", nome_carro))
+                for chave, valor in info.items():
+                    tabela.append((chave, valor))
+                break
+
+        if carro_encontrado:
+            print("\n==============================\n")
+            print(tabulate(tabela, headers=[
+                  "Campo", "Informação"], tablefmt="grid"))
+            print("\n==============================\n")
+            input("Pressione Enter para continuar.")
+        if not carro_encontrado:
+            print("\n=====================")
+            print("Carro não encontrado.\n")
+            print("=====================")
+            sleep(2)
     except FileNotFoundError:
+        clear_screen()
+        print("======================")
         print("Arquivo não encontrado")
+        print("======================")
         input("Pressione Enter para continuar.")
     except Exception as e:
+        clear_screen()
+        print("======================================================")
         print("Ocorreu um erro:", e)
+        print("======================================================")
         input("Pressione Enter para continuar.")
 
 
@@ -159,7 +180,7 @@ def atualizar_carro(arquivo):
             placa = input("Digite a Placa do Carro que deseja atualizar: ")
             carro_encontrado = False
             for info_carro, info in carros.items():
-                if info_carro["Placa"] == placa:
+                if info["Placa"] == placa:
                     carro_encontrado = True
                     print("\n==============================\n")
                     for chave, valor in info.items():
@@ -170,16 +191,28 @@ def atualizar_carro(arquivo):
                     info[chave] = valor
                     f.seek(0)
                     json.dump(carros, f, indent=4)
+                    clear_screen()
+                    print("=============================")
                     print("Carro atualizado com sucesso!")
+                    print("=============================")
                     input("Pressione Enter para continuar.")
             if not carro_encontrado:
+                clear_screen()
+                print("=====================")
                 print("Carro não encontrado.")
+                print("=====================")
                 input("Pressione Enter para continuar.")
     except FileNotFoundError:
+        clear_screen()
+        print("======================")
         print("Arquivo não encontrado")
+        print("======================")
         input("Pressione Enter para continuar.")
     except Exception as e:
+        clear_screen()
+        print("===============================================")
         print("Ocorreu um erro:", e)
+        print("===============================================")
         input("Pressione Enter para continuar.")
 
 
@@ -200,19 +233,34 @@ def deletar_carro(arquivo):
                         "Você realmente deseja deletar este carro? (S ou N) -> ")
                     if conf.lower() == "s":
                         del carros[info_carro]
+                        clear_screen()
+                        print("===========================")
                         print("Carro deletado com sucesso!")
+                        print("===========================")
                         input("Pressione Enter para continuar.")
                     else:
+                        clear_screen()
+                        print("============================")
                         print("Exclusão do carro cancelada!")
+                        print("============================")
                         input("Pressione Enter para continuar.")
                     f.seek(0)
                     json.dump(carros, f, indent=4)
             if not carro_encontrado:
+                clear_screen()
+                print("=====================")
                 print("Carro não encontrado.")
+                print("=====================")
                 input("Pressione Enter para continuar.")
     except FileNotFoundError:
+        clear_screen()
+        print("======================")
         print("Arquivo não encontrado")
+        print("======================")
         input("Pressione Enter para continuar.")
     except Exception as e:
+        clear_screen()
+        print("===========================================================")
         print("Ocorreu um erro:", e)
+        print("===========================================================")
         input("Pressione Enter para continuar.")

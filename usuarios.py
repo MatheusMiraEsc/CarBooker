@@ -1,35 +1,34 @@
 import json
-import os
 from time import sleep
-from datetime import datetime
-from validação import validar_nome, validar_sobrenome, validar_data_nascimento, validar_cpf, validar_cnh, validar_genero, validar_telefone, validar_email, validar_senha
-from util import clear_screen
-from carros import visualizar_carro_usuario
-from reserva import fazerReserva, checar_reserva, alterar_reserva, cancelar_reserva, menu_usuario_reserva
-from endereço import cadastro_endereço_usuario
+from validação import validar_nome, validar_sobrenome, validar_data_nascimento, validar_cpf, validar_cnh, validar_telefone, validar_email, validar_senha
+from util import clear_screen, cadastro_endereço
+from reserva import menu_usuario_reserva
+from tabulate import tabulate
 
 
 def menu2(usuario_logado, dados_usuario):
     arquivo_usuario = "usuarios.json"
-    arquivo_carros = "carros.json"
-    arquivo_reservas = "reservas.json"
     while True:
         clear_screen()
         print("\n=================================")
         print(f"Bem-vindo(a), {dados_usuario['Nome']}!")
+        print("=================================")
         print("1. Visualizar usuário")
         print("2. Atualizar informações do usuário")
-        print("3. Carros")
+        print("3. Carros e reserva")
         print("4. Deletar usuário")
         print("5. Voltar")
         print("=================================")
         opcao1 = input("Escolha uma opção: ")
         if opcao1 == "1":
-            visualizar_usuario(usuario_logado, arquivo_usuario)
+            visualizar_usuario(
+                usuario_logado, arquivo_usuario)
         elif opcao1 == "2":
-            atualizar_usuario(arquivo_usuario, usuario_logado, dados_usuario)
+            atualizar_usuario(
+                arquivo_usuario, usuario_logado)
+            sleep(2)
         elif opcao1 == "3":
-            menu_usuario_reserva(usuario_logado, dados_usuario)
+            menu_usuario_reserva(dados_usuario)
         elif opcao1 == "4":
             usuario_deletado = deletar_usuario(
                 arquivo_usuario, usuario_logado, dados_usuario)
@@ -38,7 +37,10 @@ def menu2(usuario_logado, dados_usuario):
         elif opcao1 == "5":
             break
         else:
-            print("Opção inválida! Tente novamente\n")
+            clear_screen()
+            print("================================")
+            print("Opção inválida! Tente novamente")
+            print("================================")
             sleep(2)
 
 
@@ -47,7 +49,10 @@ def login(arquivo):
         with open(arquivo, "r") as f:
             usuarios = json.load(f)
     except FileNotFoundError:
+        clear_screen()
+        print("===================================")
         print("Arquivo de usuários não encontrado.")
+        print("===================================")
         return None, None
     while True:
         email = input("Digite seu Email ou aperte enter para voltar: ")
@@ -59,47 +64,64 @@ def login(arquivo):
                 email_encontrado = True
                 senha = input("Digite a sua senha: ")
                 if dados["Senha"] == senha:
+                    clear_screen()
+                    print("===================")
                     print("Login bem-sucedido!")
+                    print("===================")
                     sleep(2)
                     return chaves_usuario, dados
                 else:
+                    print("\n================")
                     print("Senha incorreta.")
+                    print("================\n")
                     break
         if not email_encontrado:
-            print("CPF incorreto ou não cadastrado.")
+            clear_screen()
+            print("================================")
+            print("Email incorreto ou não cadastrado.")
+            print("================================")
     return None, None
 
 
-def cadastrar_usuario(arquivo, arquivo_end):
+def cadastrar_usuario(arquivo):
     chaves = ["Nome", "Sobrenome", "Data de nascimento",
-              "CPF", "CNH", "Genero", "Telefone", "Email", "Senha"]
-    validadores = {
-        "Nome": validar_nome,
-        "Sobrenome": validar_sobrenome,
-        "Data de nascimento": validar_data_nascimento,
-        "CPF": lambda cpf: validar_cpf(cpf, arquivo),
-        "CNH": validar_cnh,
-        "Genero": validar_genero,
-        "Telefone": validar_telefone,
-        "Email": lambda email: validar_email(email, arquivo),
-        "Senha": validar_senha
-    }
+              "CPF", "CNH", "Telefone", "Email", "Senha"]
 
     usuarios = {}
-    verificar_endereço = False
     for chave in chaves:
         while True:
-            if chave == "Senha" and verificar_endereço == False:
-                user = usuarios["CPF"]
-                cadastro_endereço_usuario(arquivo_end, user)
-                verificar_endereço = True
             dados_usuario = input(f"Digite seu(sua) {chave}: ")
+            validadores = {
+                "Nome": validar_nome,
+                "Sobrenome": validar_sobrenome,
+                "Data de nascimento": validar_data_nascimento,
+                "CPF": lambda cpf: validar_cpf(cpf, arquivo),
+                "CNH": validar_cnh,
+                "Telefone": validar_telefone,
+                "Email": lambda email: validar_email(email, arquivo),
+                "Senha": validar_senha
+            }
             valido, mensagem = validadores[chave](dados_usuario)
+
             if valido:
                 usuarios[chave] = dados_usuario
                 break
             else:
+                print("\n=========================================")
                 print(f"Entrada inválida para {chave}: {mensagem}")
+                print("=========================================")
+    enderecos = []
+    while True:
+        enderecos.append(cadastro_endereço())
+        opcao = input(
+            "Voçê deseja cadastrar mais um endereço? S ou N")
+        if opcao.lower() == "s":
+            continue
+        else:
+            break
+
+    usuarios["Enderecos"] = enderecos
+
     return usuarios
 
 
@@ -117,54 +139,125 @@ def add_usuario(usuario, arquivo):
     try:
         with open(arquivo, "w") as f:
             json.dump(dados, f, indent=4)
+        clear_screen()
+        print("============================================")
         print(f"Usuário {numero_usuarios} cadastrado com sucesso!")
+        print("============================================")
     except Exception as e:
+        clear_screen()
+        print("============================================================")
         print("Ocorreu um erro: ", e)
+        print("============================================================")
 
 
 def visualizar_usuario(usuario_logado, arquivo):
     with open(arquivo) as f:
-        usuario = json.load(f)
-    for user, valores in usuario.items():
-        if user == usuario_logado:
-            print("\n==============================\n")
-            for chaves, info in valores.items():
-                print(f"{chaves}: {info}")
-            print("\n==============================\n")
-    input("Pressione Enter para continuar.")
+        usuarios = json.load(f)
+
+    if usuario_logado in usuarios:
+        print("\n==============================\n")
+        dados_usuario = usuarios[usuario_logado]
+        tabela = []
+
+        for chave, valor in dados_usuario.items():
+            if chave == "Enderecos":
+                for i, endereco in enumerate(valor, 1):
+                    tabela.append((f"Endereço {i}", ""))
+                    for end_chave, end_valor in endereco.items():
+                        tabela.append((f"  {end_chave}", end_valor))
+            else:
+                tabela.append((chave, valor))
+
+        print(tabulate(tabela, headers=[
+              "Campo", "Informação"], tablefmt="grid"))
+        input("Pressione Enter para continuar.")
 
 
-def atualizar_usuario(arquivo, usuario_logado, dados_usuario):
+def atualizar_usuario(arquivo, usuario_logado):
     try:
         with open(arquivo, "r+") as f:
             usuarios = json.load(f)
 
+            if usuario_logado not in usuarios:
+                clear_screen()
+                print("========================================================")
+                print("Usuário não encontrado.")
+                print("========================================================")
+                return
+
             usuario_atual = usuarios[usuario_logado]
-            print("\n==============================\n")
-            for idx, (chave, valor) in enumerate(usuario_atual.items(), 1):
-                print(f"{idx}. {chave}: {valor}")
-            print("\n==============================\n")
+            tabela = []
+            idx = 1
+            chave_map = {}
+
+            for chave, valor in usuario_atual.items():
+                if chave == "Enderecos":
+                    for i, endereco in enumerate(valor, 1):
+                        tabela.append((idx, f"Endereço {i}", ""))
+                        chave_map[idx] = (
+                            usuario_atual["Enderecos"], i-1, None)
+                        idx += 1
+                        for end_chave, end_valor in endereco.items():
+                            tabela.append((idx, f"  {end_chave}", end_valor))
+                            chave_map[idx] = (
+                                usuario_atual["Enderecos"][i-1], end_chave)
+                            idx += 1
+                else:
+                    tabela.append((idx, chave, valor))
+                    chave_map[idx] = (usuario_atual, chave)
+                    idx += 1
+
+            print(tabulate(tabela, headers=[
+                  "", "Campo", "Informação"], tablefmt="rounded_grid"))
 
             chave_num = int(
                 input("Digite o número da chave que deseja atualizar: "))
-            if chave_num < 1 or chave_num > len(usuario_atual):
+            if chave_num not in chave_map:
+                clear_screen()
+                print("\n================")
                 print("Número inválido.")
+                print("================")
+                return
 
-            chave = list(usuario_atual.keys())[chave_num - 1]
+            obj, chave = chave_map[chave_num]
+            if chave is None:
+                clear_screen()
+                print("\n================")
+                print("Você selecionou um título, não pode ser atualizado.")
+                print("================")
+                return
+
             valor = input(f"Digite a nova informação para {chave}: ")
 
-            usuario_atual[chave] = valor
+            # Função para fazer validação de input aqui (se necessário)
+            obj[chave] = valor
 
             f.seek(0)
             f.truncate()
             json.dump(usuarios, f, indent=4)
+            clear_screen()
+            print("==================================")
             print("Informação atualizada com sucesso.")
+            print("==================================")
+
     except FileNotFoundError:
+        clear_screen()
+        print("A======================")
         print("Arquivo não encontrado.")
+        print("=======================")
     except json.JSONDecodeError:
+        clear_screen()
+        print("===================================")
         print("Erro ao decodificar o arquivo JSON.")
+        print("===================================")
+    except KeyError as e:
+        clear_screen()
+        print(f"Chave não encontrada: {e}")
     except Exception as e:
+        clear_screen()
+        print("========================================================")
         print("Ocorreu um erro:", e)
+        print("========================================================")
 
 
 def deletar_usuario(arquivo, usuario_logado, dados_usuario):
@@ -181,16 +274,28 @@ def deletar_usuario(arquivo, usuario_logado, dados_usuario):
                 "Você realmente deseja deletar seu perfil? (S ou N) -> ")
             if conf.lower() == "s":
                 del usuarios[usuario_logado]
-                print("Usuário deletado com sucesso!")
                 f.seek(0)
                 f.truncate()
                 json.dump(usuarios, f, indent=4)
+                clear_screen()
+                print("=============================")
+                print("Usuário deletado com sucesso!")
+                print("=============================")
                 return True
             else:
+                clear_screen()
+                print("===============================")
                 print("Deletação do usuário cancelada!")
+                print("===============================")
                 return False
     except FileNotFoundError:
+        clear_screen()
+        print("=======================")
         print("Arquivo não encontrado.")
+        print("=======================")
     except Exception as e:
+        clear_screen()
+        print("===========================================================")
         print("Ocorreu um erro:", e)
+        print("===========================================================")
     return False

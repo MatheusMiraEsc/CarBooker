@@ -1,6 +1,5 @@
 from usuarios import menu2, login, cadastrar_usuario, add_usuario
 from locadoras import menu3, cadastrar_locadora, add_locadora, login_locadora
-from carros import menu_locadora, visualizar_carro_usuario, visualizar_carro_locadora
 from util import menuOptions, clear_screen
 from time import sleep
 
@@ -15,7 +14,6 @@ def main():
 
         arquivo_usuario = "usuarios.json"
         arquivo_locadora = "locadoras.json"
-        arquivo_endereço = "endereço.json"
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
@@ -27,50 +25,78 @@ def main():
             print("============================")
             tipo_cadastro = input("Escolha uma opção: ")
             if tipo_cadastro == "1":
-                usuario = cadastrar_usuario(arquivo_usuario, arquivo_endereço)
+                usuario = cadastrar_usuario(arquivo_usuario)
                 add_usuario(usuario, arquivo_usuario)
             elif tipo_cadastro == "2":
                 locadora = cadastrar_locadora(
-                    arquivo_locadora, arquivo_endereço)
+                    arquivo_locadora)
                 add_locadora(locadora, arquivo_locadora)
             elif tipo_cadastro == "3":
-                print("")
+                clear_screen()
+                print("===========")
+                print("Voltando...")
+                print("===========")
+                sleep(2)
             else:
+                clear_screen()
+                print("================================")
                 print("Opção inválida. Tente novamente.")
+                print("================================")
                 sleep(2)
 
         elif opcao == "2":
-            clear_screen()
-            print("============================")
-            print("1. Login de Usuário")
-            print("2. Login de Locadora")
-            print("3. Voltar")
-            print("============================")
-            tipo_login = input("Escolha uma opção: ")
-            if tipo_login == "1":
-                usuario_logado, dados_usuario = login(arquivo_usuario)
-                if usuario_logado:
-                    print(f"Bem-vindo(a), {dados_usuario['Nome']}!")
-                    menu2(usuario_logado, dados_usuario)
-            elif tipo_login == "2":
-                locadora_logada, dados_locadora = login_locadora(
-                    arquivo_locadora)
-                if locadora_logada:
-                    usuario_logado = locadora_logada
-                    print(f"Bem-vindo(a), {dados_locadora['Nome']}!")
-                    menu3(locadora_logada, dados_locadora)
-            elif tipo_login == "3":
-                print("")
-            else:
-                print("Opção inválida. Tente novamente.")
-                sleep(2)
+            while True:
+                clear_screen()
+                print("============================")
+                print("1. Login de Usuário")
+                print("2. Login de Locadora")
+                print("3. Voltar")
+                print("============================")
+                tipo_login = input("Escolha uma opção: ")
+                if tipo_login == "1":
+                    usuario_logado, dados_usuario = login(arquivo_usuario)
+                    if usuario_logado:
+                        clear_screen()
+                        print("================================================")
+                        print(f"Bem-vindo(a), {dados_usuario['Nome']}!")
+                        print("================================================")
+                        menu2(usuario_logado, dados_usuario)
+                elif tipo_login == "2":
+                    locadora_logada, dados_locadora = login_locadora(
+                        arquivo_locadora)
+                    if locadora_logada:
+                        usuario_logado = locadora_logada
+                        clear_screen()
+                        print("=================================================")
+                        print(f"Bem-vindo(a), {dados_locadora['Nome']}!")
+                        print("=================================================")
+                        menu3(locadora_logada, dados_locadora)
+                elif tipo_login == "3":
+                    clear_screen()
+                    print("============")
+                    print("Voltando...")
+                    print("============")
+                    sleep(2)
+                    break
+                else:
+                    clear_screen()
+                    print("================================")
+                    print("Opção inválida. Tente novamente.")
+                    print("================================")
+                    sleep(2)
 
         elif opcao == "3":
+            clear_screen()
+            print("========================================")
             print("Obrigado por usar o CarBooker. Até logo!")
+            print("========================================")
             break
 
         else:
+            clear_screen()
+            print("====================================================")
             print("Opção inválida. Por favor, escolha uma opção válida")
+            print("====================================================")
             sleep(2)
 
 
