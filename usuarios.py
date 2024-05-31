@@ -179,9 +179,9 @@ def atualizar_usuario(arquivo, usuario_logado):
 
             if usuario_logado not in usuarios:
                 clear_screen()
-                print("========================================================")
+                print("=======================")
                 print("Usuário não encontrado.")
-                print("========================================================")
+                print("=======================")
                 return
 
             usuario_atual = usuarios[usuario_logado]

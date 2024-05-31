@@ -55,18 +55,22 @@ def cadastrar_carro(locadora):
 
     for campo in campos:
         dados_carro = input(f"Digite o(a) {campo}: ")
+
         if campo == "Numero de portas" or campo == "Ano" or campo == "Capacidade mala" or campo == "Capacidade combustivel" or campo == "Capacidade passageiro" or campo == "Quilometragem":
             while not dados_carro.isdigit():
                 print(f"{campo} deve conter apenas números.")
                 dados_carro = input(f"Digite o {campo}: ")
+
         elif campo == "Modelo" or campo == "Marca" or campo == "Categoria" or campo == "Tipo combustivel" or campo == "Cambio" or campo == "Cor":
             while not dados_carro.isalpha():
                 print(f"{campo} deve conter apenas letras.")
                 dados_carro = input(f"Digite o {campo}: ")
+
         elif campo == "ID Chassis" or campo == "Placa":
             while not contem_letra(dados_carro) or not contem_numero(dados_carro):
                 print(f"{campo} deve conter letras e números.")
                 dados_carro = input(f"Digite o {campo}: ")
+
         carro["Status reserva"] = "Disponivel"
         carro[campo] = dados_carro
 
@@ -175,7 +179,7 @@ def atualizar_carro(arquivo):
             placa = input("Digite a Placa do Carro que deseja atualizar: ")
             carro_encontrado = False
 
-            for info_carro, info in carros.items():
+            for info in carros.values():
                 if info["Placa"] == placa:
                     carro_encontrado = True
                     chaves_editaveis = list(info.keys())

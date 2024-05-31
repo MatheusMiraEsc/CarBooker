@@ -23,5 +23,22 @@
                 "UF": "12"
             }
         ]
+    },
+    "Locadora 2": {
+        "Nome": "daf",
+        "CNPJ": "123456789701",
+        "Telefone": "81991883498",
+        "Email": "a@",
+        "Senha": "Ma1@",
+        "Enderecos": [
+            {
+                "CEP": "52061050",
+                "Rua": "re",
+                "Complemento": "as",
+                "Bairro": "ds",
+                "Cidade": "zx",
+                "UF": "12"
+            }
+        ]
     }
 }

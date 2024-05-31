@@ -110,21 +110,24 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
             dados_carro = {}
 
         carro_encontrado = False
-        for chave, carro in dados_carro.items():
+        for carro in dados_carro.values():
             if carro["Placa"] == placa and carro["Status reserva"] == "Disponivel":
-                for key, dados in dados_carro.items():
-                    print("\n==============================\n")
-                    for chaves, info in dados.items():
-                        print(f"{chaves}: {info}")
-                    print("\n==============================\n")
-                    print("1. Confirmar reserva")
-                    print("2. Escolher outro carro")
+                clear_screen()
+                tabela = [(chave, info) for chave, info in carro.items()]
+                print(tabulate(tabela, headers=[
+                      "Campo", "Informação"], tablefmt="rounded_grid"))
+                print("\n1. Confirmar reserva")
+                print("2. Escolher outro carro")
+
                 conf = input("Escolha uma opção: ")
                 if conf == "1":
                     carro["Status reserva"] = "Reservado"
                     reserva["Placa do carro"] = carro["Placa"]
                     reserva["Locadora"] = carro["Locadora"]
                     reserva["CNPJ da Locadora"] = carro["CNPJ da locadora"]
+                    f.seek(0)
+                    f.truncate()
+                    json.dump(dados_carro, f, indent=4)
                     carro_encontrado = True
                     break
                 elif conf == "2":
@@ -135,11 +138,6 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
                     print("Opção inválida!")
                     print("=================")
                     sleep(2)
-
-        with open(arquivoCarros, "r+") as f:
-            f.seek(0)
-            f.truncate()
-            json.dump(dados_carro, f, indent=4)
 
     if not carro_encontrado:
         clear_screen()
@@ -160,9 +158,7 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
     try:
         with open(arquivo, "r") as f:
             reservation = json.load(f)
-    except FileNotFoundError:
-        reservation = {}
-    except json.JSONDecodeError:
+    except (FileNotFoundError, json.JSONDecodeError):
         reservation = {}
 
     reservation[id_usuario] = reserva
@@ -181,36 +177,6 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
         print("Ocorreu um erro ao salvar a reserva: ", e)
         print("=============================================================")
         sleep(2)
-
-
-def checar_reserva(arquivo, usuario):
-    try:
-        with open(arquivo, "r") as f:
-            reserva = json.load(f)
-    except FileNotFoundError:
-        reserva = {}
-        print("\n===================================")
-        print("Arquivo de reservas não encontrado.")
-        print("=====================================")
-        sleep(2)
-        return
-    except json.JSONDecodeError:
-        print("\n==================================")
-        print("Erro ao ler o arquivo de reservas.")
-        print("====================================")
-        sleep(2)
-        return
-
-    if usuario["CPF"] in reserva:
-        dados_reserva = reserva[usuario["CPF"]]
-        tabela = [(chave, valor) for chave, valor in dados_reserva.items()]
-        clear_screen()
-        print(tabulate(tabela, headers=[
-              "Campo", "Informação"], tablefmt="rounded_grid"))
-    else:
-        print("Reserva não encontrada para o usuário.")
-
-    input("Pressione Enter para continuar.")
 
 
 def checar_reservas_locadora(arquivo, dados_locadora):
@@ -235,7 +201,7 @@ def checar_reservas_locadora(arquivo, dados_locadora):
     reservas_encontradas = False
     tabela = []
 
-    for chave, dados in reservas.items():
+    for dados in reservas.values():
         if dados["CNPJ da Locadora"] == dados_locadora["CNPJ"]:
             if not reservas_encontradas:
                 clear_screen()
@@ -382,7 +348,7 @@ def cancelar_reserva(arquivo_reservas, arquivo_carros, dados_usuario):
 
                     for _, valor in dados_carro.items():
                         if valor["Placa"] == reserva_usuario["Placa do carro"]:
-                            valor["Status reserva"] = "Disponível"
+                            valor["Status reserva"] = "Disponivel"
                             f_carros.seek(0)
                             f_carros.truncate()
                             json.dump(dados_carro, f_carros, indent=4)

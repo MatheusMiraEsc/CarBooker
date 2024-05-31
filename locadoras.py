@@ -104,7 +104,7 @@ def login_locadora(arquivo):
             print("==================================")
             print("Email incorreto ou não cadastrado.")
             print("==================================")
-    return None, None
+        return None, None
 
 
 def menu3(locadora_logada, dados_locadora):
