@@ -155,7 +155,6 @@ def visualizar_usuario(usuario_logado, arquivo):
         usuarios = json.load(f)
 
     if usuario_logado in usuarios:
-        print("\n==============================\n")
         dados_usuario = usuarios[usuario_logado]
         tabela = []
 
@@ -169,7 +168,7 @@ def visualizar_usuario(usuario_logado, arquivo):
                 tabela.append((chave, valor))
 
         print(tabulate(tabela, headers=[
-              "Campo", "Informação"], tablefmt="grid"))
+              "Campo", "Informação"], tablefmt="rounded_grid"))
         input("Pressione Enter para continuar.")
 
 
@@ -262,21 +261,32 @@ def atualizar_usuario(arquivo, usuario_logado):
 
 def deletar_usuario(arquivo, usuario_logado, dados_usuario):
     try:
-        with open(arquivo, "r+") as f:
+        with open(arquivo) as f:
             usuarios = json.load(f)
 
-            print("\n==============================\n")
+        if usuario_logado in usuarios:
+            dados_usuario = usuarios[usuario_logado]
+            tabela = []
+            idx = 1
             for chave, valor in dados_usuario.items():
-                print(f"{chave}: {valor}")
-            print("\n==============================\n")
+                if chave == "Enderecos":
+                    for i, endereco in enumerate(valor, 1):
+                        tabela.append((f"Endereço {i}", ""))
+                        for end_chave, end_valor in endereco.items():
+                            tabela.append((f"  {end_chave}", end_valor))
+                else:
+                    tabela.append((chave, valor))
+
+            print(tabulate(tabela, headers=[
+                  "Campo", "Informação"], tablefmt="rounded_grid"))
+            input("Pressione Enter para continuar.")
 
             conf = input(
                 "Você realmente deseja deletar seu perfil? (S ou N) -> ")
             if conf.lower() == "s":
                 del usuarios[usuario_logado]
-                f.seek(0)
-                f.truncate()
-                json.dump(usuarios, f, indent=4)
+                with open(arquivo, "w") as f:
+                    json.dump(usuarios, f, indent=4)
                 clear_screen()
                 print("=============================")
                 print("Usuário deletado com sucesso!")

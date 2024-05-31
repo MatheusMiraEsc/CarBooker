@@ -1,7 +1,6 @@
 import json
 from time import sleep
 from util import clear_screen
-import json
 from tabulate import tabulate
 
 
@@ -112,10 +111,8 @@ def visualizar_carro_usuario(arquivo):
                     break
 
         if carro_encontrado:
-            print("\n==============================\n")
             print(tabulate(tabela, headers=[
-                  "Campo", "Informação"], tablefmt="grid"))
-            print("\n==============================\n")
+                  "Campo", "Informação"], tablefmt="rounded_grid"))
             input("Pressione Enter para continuar.")
         if not carro_encontrado:
             clear_screen()
@@ -149,10 +146,8 @@ def visualizar_carro_locadora(arquivo):
                 break
 
         if carro_encontrado:
-            print("\n==============================\n")
             print(tabulate(tabela, headers=[
-                  "Campo", "Informação"], tablefmt="grid"))
-            print("\n==============================\n")
+                  "Campo", "Informação"], tablefmt="rounded_grid"))
             input("Pressione Enter para continuar.")
         if not carro_encontrado:
             print("\n=====================")
@@ -179,41 +174,80 @@ def atualizar_carro(arquivo):
             carros = json.load(f)
             placa = input("Digite a Placa do Carro que deseja atualizar: ")
             carro_encontrado = False
+
             for info_carro, info in carros.items():
                 if info["Placa"] == placa:
                     carro_encontrado = True
-                    print("\n==============================\n")
-                    for chave, valor in info.items():
-                        print(f"{chave}: {valor}")
-                    print("\n==============================\n")
-                    chave = input("Digite a chave que deseja atualizar: ")
-                    valor = input("Digite a Informação a ser atualizada: ")
+                    chaves_editaveis = list(info.keys())
+                    chaves_mapeadas = {idx + 1: chave for idx,
+                                       chave in enumerate(chaves_editaveis)}
+
+                    tabela = [(idx, chave, info[chave])
+                              for idx, chave in chaves_mapeadas.items()]
+
+                    print(tabulate(tabela, headers=[
+                          "Número", "Campo", "Informação"], tablefmt="rounded_grid"))
+
+                    chave_num_str = input(
+                        "Digite o número da chave que deseja atualizar ou pressione enter para voltar: ")
+                    if chave_num_str == "":
+                        clear_screen()
+                        print("\n============")
+                        print("Voltando...")
+                        print("============")
+                        sleep(2)
+                        return
+
+                    try:
+                        chave_num = int(chave_num_str)
+                        if chave_num not in chaves_mapeadas:
+                            raise ValueError("Número inválido.")
+                    except ValueError:
+                        clear_screen()
+                        print("\n================")
+                        print("Número inválido.")
+                        print("================")
+                        sleep(2)
+                        return
+
+                    chave = chaves_mapeadas[chave_num]
+                    valor = input(f"Digite a nova informação para {chave}: ")
                     info[chave] = valor
+
                     f.seek(0)
+                    f.truncate()
                     json.dump(carros, f, indent=4)
                     clear_screen()
-                    print("=============================")
+                    print("\n=============================")
                     print("Carro atualizado com sucesso!")
                     print("=============================")
-                    input("Pressione Enter para continuar.")
+                    sleep(2)
+                    return
+
             if not carro_encontrado:
                 clear_screen()
                 print("=====================")
                 print("Carro não encontrado.")
                 print("=====================")
-                input("Pressione Enter para continuar.")
+                sleep(2)
     except FileNotFoundError:
         clear_screen()
-        print("======================")
+        print("\n======================")
         print("Arquivo não encontrado")
         print("======================")
-        input("Pressione Enter para continuar.")
+        sleep(2)
+    except json.JSONDecodeError:
+        clear_screen()
+        print("\n==================================")
+        print("Erro ao ler o arquivo de carros.")
+        print("==================================")
+        sleep(2)
     except Exception as e:
         clear_screen()
-        print("===============================================")
-        print("Ocorreu um erro:", e)
-        print("===============================================")
-        input("Pressione Enter para continuar.")
+        print("\n=============================================")
+        print(f"Ocorreu um erro: {e}")
+        print("=============================================")
+        sleep(2)
 
 
 def deletar_carro(arquivo):
@@ -222,13 +256,19 @@ def deletar_carro(arquivo):
             carros = json.load(f)
             placa = input("Digite a Placa do carro que deseja deletar: ")
             carro_encontrado = False
+
             for info_carro, info in list(carros.items()):
-                if info_carro["Placa"] == placa:
+                if info["Placa"] == placa:
                     carro_encontrado = True
-                    print("\n==============================\n")
-                    for chave, valor in info.items():
-                        print(f"{chave}: {valor}")
-                    print("\n==============================\n")
+
+                    chaves_mapeadas = {idx + 1: chave for idx,
+                                       chave in enumerate(info.keys())}
+                    tabela = [(idx, chave, info[chave])
+                              for idx, chave in chaves_mapeadas.items()]
+
+                    print(tabulate(tabela, headers=[
+                          "Número", "Campo", "Informação"], tablefmt="grid"))
+
                     conf = input(
                         "Você realmente deseja deletar este carro? (S ou N) -> ")
                     if conf.lower() == "s":
@@ -244,8 +284,12 @@ def deletar_carro(arquivo):
                         print("Exclusão do carro cancelada!")
                         print("============================")
                         input("Pressione Enter para continuar.")
+
                     f.seek(0)
+                    f.truncate()
                     json.dump(carros, f, indent=4)
+                    break
+
             if not carro_encontrado:
                 clear_screen()
                 print("=====================")

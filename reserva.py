@@ -40,7 +40,7 @@ def menu_usuario_reserva(dados_usuario):
             clear_screen()
             print("\n================================")
             print("Opção inválida! Tente novamente")
-            print("================================")
+            print("==================================")
             sleep(2)
 
 
@@ -67,7 +67,7 @@ def menu_locadora_reserva(dados_locadora):
             clear_screen()
             print("\n================================")
             print("Opção inválida! Tente novamente")
-            print("================================")
+            print("==================================")
             sleep(2)
 
 
@@ -92,7 +92,7 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
         clear_screen()
         print("\n==============================")
         print(mensagem)
-        print("==============================")
+        print("================================")
         sleep(2)
         return
 
@@ -133,7 +133,7 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
                     clear_screen()
                     print("\n===============")
                     print("Opção inválida!")
-                    print("===============")
+                    print("=================")
                     sleep(2)
 
         with open(arquivoCarros, "r+") as f:
@@ -191,24 +191,22 @@ def checar_reserva(arquivo, usuario):
         reserva = {}
         print("\n===================================")
         print("Arquivo de reservas não encontrado.")
-        print("===================================")
+        print("=====================================")
         sleep(2)
         return
     except json.JSONDecodeError:
         print("\n==================================")
         print("Erro ao ler o arquivo de reservas.")
-        print("==================================")
+        print("====================================")
         sleep(2)
         return
 
     if usuario["CPF"] in reserva:
         dados_reserva = reserva[usuario["CPF"]]
         tabela = [(chave, valor) for chave, valor in dados_reserva.items()]
-
-        print("\n==============================\n")
+        clear_screen()
         print(tabulate(tabela, headers=[
-              "Campo", "Informação"], tablefmt="grid"))
-        print("\n==============================\n")
+              "Campo", "Informação"], tablefmt="rounded_grid"))
     else:
         print("Reserva não encontrada para o usuário.")
 
@@ -223,14 +221,14 @@ def checar_reservas_locadora(arquivo, dados_locadora):
         clear_screen()
         print("\n===================================")
         print("Arquivo de reservas não encontrado.")
-        print("===================================")
+        print("=====================================")
         sleep(2)
         return
     except json.JSONDecodeError:
         clear_screen()
         print("\n==================================")
         print("Erro ao ler o arquivo de reservas.")
-        print("==================================")
+        print("====================================")
         sleep(2)
         return
 
@@ -238,7 +236,7 @@ def checar_reservas_locadora(arquivo, dados_locadora):
     tabela = []
 
     for chave, dados in reservas.items():
-        if dados["CNPJ da locadora"] == dados_locadora["CNPJ"]:
+        if dados["CNPJ da Locadora"] == dados_locadora["CNPJ"]:
             if not reservas_encontradas:
                 clear_screen()
                 print("\n==============================")
@@ -252,12 +250,12 @@ def checar_reservas_locadora(arquivo, dados_locadora):
 
     if reservas_encontradas:
         print(tabulate(tabela, headers=[
-              "Campo", "Informação"], tablefmt="grid"))
+              "Campo", "Informação"], tablefmt="rounded_grid"))
     else:
         clear_screen()
-        print("\n===========================")
+        print("============================")
         print("Nenhuma reserva encontrada.")
-        print("===========================")
+        print("=============================")
 
     input("Pressione Enter para continuar.")
 
@@ -281,7 +279,7 @@ def alterar_reserva(arquivoReservas, usuario):
                 clear_screen()
                 print("\n=============================")
                 print("Usuário não tem reserva feita")
-                print("=============================")
+                print("===============================")
                 sleep(2)
                 return
 
@@ -290,11 +288,9 @@ def alterar_reserva(arquivoReservas, usuario):
 
             tabela = [(idx, chave, dados_usuario[chave]) for idx,
                       chave in chaves_mapeadas.items() if chave in dados_usuario]
-
-            print("\n==============================\n")
+            clear_screen()
             print(tabulate(tabela, headers=[
-                  "Número", "Campo", "Informação"], tablefmt="grid"))
-            print("\n==============================\n")
+                  "Número", "Campo", "Informação"], tablefmt="rounded_grid"))
 
             chave_num_str = input(
                 "Digite o número da chave que deseja atualizar ou pressione enter para voltar: ")
@@ -302,7 +298,7 @@ def alterar_reserva(arquivoReservas, usuario):
                 clear_screen()
                 print("\n============")
                 print("Voltando...")
-                print("============")
+                print("==============")
                 sleep(2)
                 return
 
@@ -314,7 +310,7 @@ def alterar_reserva(arquivoReservas, usuario):
                 clear_screen()
                 print("\n================")
                 print("Número inválido.")
-                print("================")
+                print("==================")
                 sleep(2)
                 return
 
@@ -329,26 +325,26 @@ def alterar_reserva(arquivoReservas, usuario):
             clear_screen()
             print("\n=============================")
             print("Reserva alterada com sucesso.")
-            print("============================")
+            print("==============================")
             sleep(2)
 
     except FileNotFoundError:
         clear_screen()
         print("\n===================================")
         print("Arquivo de reservas não encontrado.")
-        print("===================================")
+        print("=====================================")
         sleep(2)
     except json.JSONDecodeError:
         clear_screen()
         print("\n==================================")
         print("Erro ao ler o arquivo de reservas.")
-        print("==================================")
+        print("====================================")
         sleep(2)
     except Exception as e:
         clear_screen()
         print("\n=============================================")
         print(f"Ocorreu um erro: {e}")
-        print("=============================================")
+        print("===============================================")
         sleep(2)
 
 
@@ -365,14 +361,14 @@ def cancelar_reserva(arquivo_reservas, arquivo_carros, dados_usuario):
                 clear_screen()
                 print("\n===========================")
                 print("Nenhuma reserva encontrada.")
-                print("===========================")
+                print("=============================")
                 return False
 
             tabela = [(chave, valor)
                       for chave, valor in reserva_usuario.items()]
             print("\n==============================\n")
             print(tabulate(tabela, headers=[
-                  "Campo", "Informação"], tablefmt="grid"))
+                  "Campo", "Informação"], tablefmt="rounded_grid"))
             print("\n==============================\n")
 
             conf = input(
@@ -384,8 +380,8 @@ def cancelar_reserva(arquivo_reservas, arquivo_carros, dados_usuario):
                     except json.JSONDecodeError:
                         dados_carro = {}
 
-                    for chave, valor in dados_carro.items():
-                        if valor["Placa"] == reserva_usuario["Carro"]:
+                    for _, valor in dados_carro.items():
+                        if valor["Placa"] == reserva_usuario["Placa do carro"]:
                             valor["Status reserva"] = "Disponível"
                             f_carros.seek(0)
                             f_carros.truncate()
@@ -426,17 +422,19 @@ def cancelar_reserva_locadora(arquivo_reservas, arquivo_carros, dados_locadora):
 
             placa_carro = input("Digite a placa do carro reservado: ")
 
-            reservas_locadora = [reserva for reserva in reservas.values(
-            ) if reserva["CNPJ"] == dados_locadora["CNPJ"] and reserva["Carro"] == placa_carro]
+            reservas_locadora = [key for key, reserva in reservas.items()
+                                 if reserva.get("CNPJ da Locadora") == dados_locadora["CNPJ"] and
+                                 reserva.get("Placa do carro") == placa_carro]
 
             if not reservas_locadora:
                 clear_screen()
                 print("\n===========================")
                 print("Nenhuma reserva encontrada.")
-                print("===========================")
+                print("=============================")
                 return False
 
-            for reserva_locadora in reservas_locadora:
+            for key in reservas_locadora:
+                reserva_locadora = reservas[key]
                 tabela = [(chave, valor)
                           for chave, valor in reserva_locadora.items()]
                 print("\n==============================\n")
@@ -461,7 +459,7 @@ def cancelar_reserva_locadora(arquivo_reservas, arquivo_carros, dados_locadora):
                                 json.dump(dados_carro, f_carros, indent=4)
                                 break
 
-                    reservas.pop(reserva_locadora["CPF"], None)
+                    del reservas[key]
                     clear_screen()
                     print("===============================")
                     print("Reserva cancelada com sucesso!")

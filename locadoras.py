@@ -129,9 +129,9 @@ def menu3(locadora_logada, dados_locadora):
         elif opcao == "3":
             menu_locadora(dados_locadora)
         elif opcao == "4":
-            menu_locadora_reserva(locadora_logada)
+            menu_locadora_reserva(dados_locadora)
         elif opcao == "5":
-            if deletar_locadora(arquivo_json, locadora_logada, dados_locadora):
+            if deletar_locadora(arquivo_json, locadora_logada):
                 sleep(2)
                 return
         elif opcao == "6":
@@ -162,7 +162,7 @@ def visualizar_locadora(locadora_logada, arquivo):
                 tabela.append((chave, valor))
 
         print(tabulate(tabela, headers=[
-              "Campo", "Informação"], tablefmt="grid"))
+              "Campo", "Informação"], tablefmt="rounded_grid"))
         print("\n==============================\n")
 
     input("Pressione Enter para continuar.")
@@ -204,7 +204,7 @@ def atualizar_locadora(arquivo, locadora_logada):
 
             print("\n==============================\n")
             print(tabulate(tabela, headers=[
-                  "#", "Campo", "Informação"], tablefmt="grid"))
+                  "#", "Campo", "Informação"], tablefmt="rounded_grid"))
             print("\n==============================\n")
 
             chave_num = int(
@@ -258,14 +258,43 @@ def atualizar_locadora(arquivo, locadora_logada):
         print("========================================================")
 
 
-def deletar_locadora(arquivo, locadora_logada, dados_locadora):
+def deletar_locadora(arquivo, locadora_logada):
     try:
         with open(arquivo, "r+") as f:
             locadoras = json.load(f)
 
+            if locadora_logada not in locadoras:
+                clear_screen()
+                print("========================================================")
+                print("Locadora não encontrada.")
+                print("========================================================")
+                return
+
+            locadora_atual = locadoras[locadora_logada]
+            tabela = []
+            idx = 1
+            chave_map = {}
+
+            for chave, valor in locadora_atual.items():
+                if chave == "Enderecos":
+                    for i, endereco in enumerate(valor, 1):
+                        tabela.append((idx, f"Endereço {i}", ""))
+                        chave_map[idx] = (
+                            locadora_atual["Enderecos"], i-1, None)
+                        idx += 1
+                        for end_chave, end_valor in endereco.items():
+                            tabela.append((idx, f"  {end_chave}", end_valor))
+                            chave_map[idx] = (
+                                locadora_atual["Enderecos"][i-1], end_chave)
+                            idx += 1
+                else:
+                    tabela.append((idx, chave, valor))
+                    chave_map[idx] = (locadora_atual, chave)
+                    idx += 1
+
             print("\n==============================\n")
-            for chave, valor in dados_locadora.items():
-                print(f"{chave}: {valor}")
+            print(tabulate(tabela, headers=[
+                  "#", "Campo", "Informação"], tablefmt="rounded_grid"))
             print("\n==============================\n")
 
             conf = input(

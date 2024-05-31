@@ -21,7 +21,7 @@
     "Carro 2": {
         "Locadora": "reciclobikes",
         "CNPJ da locadora": "920921000107",
-        "Status reserva": "Disponivel",
+        "Status reserva": "Reservado",
         "Modelo": "ethios",
         "Marca": "toyota",
         "ID Chassis": "949492ojnjn",
@@ -40,7 +40,7 @@
     "Carro 3": {
         "Locadora": "Matheus",
         "CNPJ da locadora": "920921000106",
-        "Status reserva": "Reservado",
+        "Status reserva": "Dispon\u00edvel",
         "Modelo": "MonsterTruck",
         "Marca": "BMW",
         "ID Chassis": "qwe789",
@@ -54,26 +54,6 @@
         "Quilometragem": "50",
         "Cambio": "Manual",
         "Cor": "Prata",
-        "Tipo combustivel": "Petrolio"
-    },
-    "Carro 4": {
-        "Locadora": "reciclobikes",
-        "CNPJ da locadora": "920921000107",
-        "Status reserva": "Disponivel",
-        "Modelo": "Fusca",
-        "Marca": "Seila",
-        "ID Chassis": "sd4a565",
-        "Numero de portas": "5",
-        "Ano": "4",
-        "Categoria": "sd",
-        "Placa": "2d1",
-        "Capacidade mala": "2",
-        "Capacidade combustivel": "2",
-        "Capacidade passageiro": "4",
-        "Quilometragem": "221",
-        "Cambio": "221",
-        "Cor": "dsds",
-        "Tipo combustivel": "dsd",
-        "": ""
+        "Tipo combustivel": "Carbono"
     }
 }
