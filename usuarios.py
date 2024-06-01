@@ -1,7 +1,7 @@
 import json
 from time import sleep
 from validação import validar_nome, validar_sobrenome, validar_data_nascimento, validar_cpf, validar_cnh, validar_telefone, validar_email, validar_senha
-from util import clear_screen, cadastro_endereço
+from util import clear_screen, cadastro_endereço, print_vermelho, print_verde
 from reserva import menu_usuario_reserva
 from tabulate import tabulate
 
@@ -39,7 +39,7 @@ def menu2(usuario_logado, dados_usuario):
         else:
             clear_screen()
             print("================================")
-            print("Opção inválida! Tente novamente")
+            print_vermelho("Opção inválida! Tente novamente")
             print("================================")
             sleep(2)
 
@@ -51,7 +51,7 @@ def login(arquivo):
     except FileNotFoundError:
         clear_screen()
         print("===================================")
-        print("Arquivo de usuários não encontrado.")
+        print_vermelho("Arquivo de usuários não encontrado.")
         print("===================================")
         return None, None
     while True:
@@ -66,19 +66,19 @@ def login(arquivo):
                 if dados["Senha"] == senha:
                     clear_screen()
                     print("===================")
-                    print("Login bem-sucedido!")
+                    print_verde("Login bem-sucedido!")
                     print("===================")
                     sleep(2)
                     return chaves_usuario, dados
                 else:
                     print("\n================")
-                    print("Senha incorreta.")
+                    print_vermelho("Senha incorreta.")
                     print("================\n")
                     break
         if not email_encontrado:
             clear_screen()
             print("================================")
-            print("Email incorreto ou não cadastrado.")
+            print_vermelho("Email incorreto ou não cadastrado.")
             print("================================")
     return None, None
 
@@ -108,7 +108,7 @@ def cadastrar_usuario(arquivo):
                 break
             else:
                 print("\n=========================================")
-                print(f"Entrada inválida para {chave}: {mensagem}")
+                print_vermelho(f"Entrada inválida para {chave}: {mensagem}")
                 print("=========================================")
     enderecos = []
     while True:
@@ -141,12 +141,12 @@ def add_usuario(usuario, arquivo):
             json.dump(dados, f, indent=4)
         clear_screen()
         print("============================================")
-        print(f"Usuário {numero_usuarios} cadastrado com sucesso!")
+        print_verde(f"Usuário {numero_usuarios} cadastrado com sucesso!")
         print("============================================")
     except Exception as e:
         clear_screen()
         print("============================================================")
-        print("Ocorreu um erro: ", e)
+        print_vermelho("Ocorreu um erro: ", e)
         print("============================================================")
 
 
@@ -180,7 +180,7 @@ def atualizar_usuario(arquivo, usuario_logado):
             if usuario_logado not in usuarios:
                 clear_screen()
                 print("=======================")
-                print("Usuário não encontrado.")
+                print_vermelho("Usuário não encontrado.")
                 print("=======================")
                 return
 
@@ -214,7 +214,7 @@ def atualizar_usuario(arquivo, usuario_logado):
             if chave_num not in chave_map:
                 clear_screen()
                 print("\n================")
-                print("Número inválido.")
+                print_vermelho("Número inválido.")
                 print("================")
                 return
 
@@ -222,7 +222,8 @@ def atualizar_usuario(arquivo, usuario_logado):
             if chave is None:
                 clear_screen()
                 print("\n================")
-                print("Você selecionou um título, não pode ser atualizado.")
+                print_vermelho(
+                    "Você selecionou um título, não pode ser atualizado.")
                 print("================")
                 return
 
@@ -236,26 +237,26 @@ def atualizar_usuario(arquivo, usuario_logado):
             json.dump(usuarios, f, indent=4)
             clear_screen()
             print("==================================")
-            print("Informação atualizada com sucesso.")
+            print_verde("Informação atualizada com sucesso.")
             print("==================================")
 
     except FileNotFoundError:
         clear_screen()
         print("A======================")
-        print("Arquivo não encontrado.")
+        print_vermelho("Arquivo não encontrado.")
         print("=======================")
     except json.JSONDecodeError:
         clear_screen()
         print("===================================")
-        print("Erro ao decodificar o arquivo JSON.")
+        print_vermelho("Erro ao decodificar o arquivo JSON.")
         print("===================================")
     except KeyError as e:
         clear_screen()
-        print(f"Chave não encontrada: {e}")
+        print_vermelho(f"Chave não encontrada: {e}")
     except Exception as e:
         clear_screen()
         print("========================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("========================================================")
 
 
@@ -289,7 +290,7 @@ def deletar_usuario(arquivo, usuario_logado, dados_usuario):
                     json.dump(usuarios, f, indent=4)
                 clear_screen()
                 print("=============================")
-                print("Usuário deletado com sucesso!")
+                print_verde("Usuário deletado com sucesso!")
                 print("=============================")
                 return True
             else:
@@ -301,11 +302,11 @@ def deletar_usuario(arquivo, usuario_logado, dados_usuario):
     except FileNotFoundError:
         clear_screen()
         print("=======================")
-        print("Arquivo não encontrado.")
+        print_vermelho("Arquivo não encontrado.")
         print("=======================")
     except Exception as e:
         clear_screen()
         print("===========================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("===========================================================")
     return False

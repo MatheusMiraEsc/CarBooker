@@ -1,6 +1,6 @@
 import json
 from validação import validar_nome, validar_cnpj, validar_telefone, validar_email, validar_senha
-from util import clear_screen, cadastro_endereço
+from util import clear_screen, cadastro_endereço, print_vermelho, print_verde
 from carros import menu_locadora
 from time import sleep
 from reserva import menu_locadora_reserva
@@ -27,7 +27,7 @@ def cadastrar_locadora(arquivo):
                 break
             else:
                 print("\n==========================================")
-                print(f"Entrada inválida para {chave}: {mensagem}")
+                print_vermelho(f"Entrada inválida para {chave}: {mensagem}")
                 print("==========================================")
 
     enderecos = []
@@ -59,12 +59,12 @@ def add_locadora(locadora, arquivo):
             json.dump(dados, f, indent=4)
         clear_screen()
         print("\n=========================================================")
-        print(f"Locadora {numero_locadoras} cadastrada com sucesso!")
+        print_verde(f"Locadora {numero_locadoras} cadastrada com sucesso!")
         print("=========================================================")
     except Exception as e:
         clear_screen()
         print("\n==============================================")
-        print("Ocorreu um erro: ", e)
+        print_vermelho("Ocorreu um erro: ", e)
         print("==============================================")
 
 
@@ -74,7 +74,9 @@ def login_locadora(arquivo):
             locadoras = json.load(f)
     except FileNotFoundError:
         clear_screen()
-        print("Arquivo de locadoras não encontrado.")
+        print("====================================")
+        print_vermelho("Arquivo de locadoras não encontrado.")
+        print("====================================")
         locadoras = {}
         return None
     while True:
@@ -90,19 +92,19 @@ def login_locadora(arquivo):
                 if dados["Senha"] == senha:
                     clear_screen()
                     print("\n===================")
-                    print("Login bem-sucedido!")
+                    print_verde("Login bem-sucedido!")
                     print("===================")
                     sleep(2)
                     return nome_locadora, dados
                 else:
                     print("================")
-                    print("Senha incorreta.")
+                    print_vermelho("Senha incorreta.")
                     print("================")
                     break
         if not email_encontrado:
             clear_screen()
             print("==================================")
-            print("Email incorreto ou não cadastrado.")
+            print_vermelho("Email incorreto ou não cadastrado.")
             print("==================================")
         return None, None
 
@@ -139,7 +141,7 @@ def menu3(locadora_logada, dados_locadora):
         else:
             clear_screen()
             print("\n================================")
-            print("Opção inválida! Tente novamente")
+            print_vermelho("Opção inválida! Tente novamente")
             print("================================")
 
 
@@ -175,9 +177,9 @@ def atualizar_locadora(arquivo, locadora_logada):
 
             if locadora_logada not in locadoras:
                 clear_screen()
-                print("========================================================")
-                print("Locadora não encontrada.")
-                print("========================================================")
+                print("==============================")
+                print_vermelho("Locadora não encontrada.")
+                print("==============================")
                 return
 
             locadora_atual = locadoras[locadora_logada]
@@ -202,25 +204,24 @@ def atualizar_locadora(arquivo, locadora_logada):
                     chave_map[idx] = (locadora_atual, chave)
                     idx += 1
 
-            print("\n==============================\n")
             print(tabulate(tabela, headers=[
                   "#", "Campo", "Informação"], tablefmt="rounded_grid"))
-            print("\n==============================\n")
 
             chave_num = int(
                 input("Digite o número da chave que deseja atualizar: "))
             if chave_num not in chave_map:
                 clear_screen()
                 print("\n================")
-                print("Número inválido.")
+                print_vermelho("Número inválido.")
                 print("================")
                 return
 
             obj, chave = chave_map[chave_num]
             if chave is None:
-                print("\n================")
-                print("Você selecionou um título, não pode ser atualizado.")
-                print("================")
+                print("\n=============================================")
+                print_vermelho(
+                    "Você selecionou um título, não pode ser atualizado.")
+                print("==============================================")
                 return
 
             valor = input(f"Digite a nova informação para {chave}: ")
@@ -233,28 +234,28 @@ def atualizar_locadora(arquivo, locadora_logada):
             json.dump(locadoras, f, indent=4)
             clear_screen()
             print("==================================")
-            print("Informação atualizada com sucesso.")
+            print_verde("Informação atualizada com sucesso.")
             print("==================================")
 
     except FileNotFoundError:
         clear_screen()
         print("A======================")
-        print("Arquivo não encontrado.")
+        print_vermelho("Arquivo não encontrado.")
         print("=======================")
     except json.JSONDecodeError:
         clear_screen()
         print("===================================")
-        print("Erro ao decodificar o arquivo JSON.")
+        print_vermelho("Erro ao decodificar o arquivo JSON.")
         print("===================================")
     except ValueError:
         clear_screen()
         print("============================================")
-        print("Entrada inválida.")
+        print_vermelho("Entrada inválida.")
         print("============================================")
     except Exception as e:
         clear_screen()
         print("========================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("========================================================")
 
 
@@ -265,9 +266,9 @@ def deletar_locadora(arquivo, locadora_logada):
 
             if locadora_logada not in locadoras:
                 clear_screen()
-                print("========================================================")
-                print("Locadora não encontrada.")
-                print("========================================================")
+                print("==============================")
+                print_vermelho("Locadora não encontrada.")
+                print("==============================")
                 return
 
             locadora_atual = locadoras[locadora_logada]
@@ -292,10 +293,8 @@ def deletar_locadora(arquivo, locadora_logada):
                     chave_map[idx] = (locadora_atual, chave)
                     idx += 1
 
-            print("\n==============================\n")
             print(tabulate(tabela, headers=[
                   "#", "Campo", "Informação"], tablefmt="rounded_grid"))
-            print("\n==============================\n")
 
             conf = input(
                 "Você realmente deseja deletar o perfil da locadora? (S ou N) -> ")
@@ -303,7 +302,7 @@ def deletar_locadora(arquivo, locadora_logada):
                 del locadoras[locadora_logada]
                 clear_screen()
                 print("==============================")
-                print("Locadora deletada com sucesso!")
+                print_verde("Locadora deletada com sucesso!")
                 print("==============================")
                 f.seek(0)
                 f.truncate()
@@ -318,11 +317,11 @@ def deletar_locadora(arquivo, locadora_logada):
     except FileNotFoundError:
         clear_screen()
         print("=======================")
-        print("Arquivo não encontrado.")
+        print_vermelho("Arquivo não encontrado.")
         print("=======================")
     except Exception as e:
         clear_screen()
         print("=======================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("=======================================================")
     return False

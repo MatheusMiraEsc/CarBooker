@@ -1,6 +1,6 @@
 from usuarios import menu2, login, cadastrar_usuario, add_usuario
 from locadoras import menu3, cadastrar_locadora, add_locadora, login_locadora
-from util import menuOptions, clear_screen
+from util import menuOptions, clear_screen, print_vermelho, print_verde
 from time import sleep
 
 
@@ -40,7 +40,7 @@ def main():
             else:
                 clear_screen()
                 print("================================")
-                print("Opção inválida. Tente novamente.")
+                print_vermelho("Opção inválida. Tente novamente.")
                 print("================================")
                 sleep(2)
 
@@ -81,7 +81,7 @@ def main():
                 else:
                     clear_screen()
                     print("================================")
-                    print("Opção inválida. Tente novamente.")
+                    print_vermelho("Opção inválida. Tente novamente.")
                     print("================================")
                     sleep(2)
 
@@ -95,7 +95,8 @@ def main():
         else:
             clear_screen()
             print("====================================================")
-            print("Opção inválida. Por favor, escolha uma opção válida")
+            print_vermelho(
+                "Opção inválida. Por favor, escolha uma opção válida")
             print("====================================================")
             sleep(2)
 

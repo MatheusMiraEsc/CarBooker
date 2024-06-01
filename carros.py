@@ -1,6 +1,6 @@
 import json
 from time import sleep
-from util import clear_screen
+from util import clear_screen, print_vermelho, print_verde
 from tabulate import tabulate
 
 
@@ -30,7 +30,7 @@ def menu_locadora(dadosLocadora):
         else:
             clear_screen()
             print("\n====================================")
-            print("Opção inválida! Tente novamente\n")
+            print_vermelho("Opção inválida! Tente novamente\n")
             print("====================================")
             sleep(2)
 
@@ -58,17 +58,17 @@ def cadastrar_carro(locadora):
 
         if campo == "Numero de portas" or campo == "Ano" or campo == "Capacidade mala" or campo == "Capacidade combustivel" or campo == "Capacidade passageiro" or campo == "Quilometragem":
             while not dados_carro.isdigit():
-                print(f"{campo} deve conter apenas números.")
+                print_vermelho(f"{campo} deve conter apenas números.")
                 dados_carro = input(f"Digite o {campo}: ")
 
         elif campo == "Modelo" or campo == "Marca" or campo == "Categoria" or campo == "Tipo combustivel" or campo == "Cambio" or campo == "Cor":
             while not dados_carro.isalpha():
-                print(f"{campo} deve conter apenas letras.")
+                print_vermelho(f"{campo} deve conter apenas letras.")
                 dados_carro = input(f"Digite o {campo}: ")
 
         elif campo == "ID Chassis" or campo == "Placa":
             while not contem_letra(dados_carro) or not contem_numero(dados_carro):
-                print(f"{campo} deve conter letras e números.")
+                print_vermelho(f"{campo} deve conter letras e números.")
                 dados_carro = input(f"Digite o {campo}: ")
 
         carro["Status reserva"] = "Disponivel"
@@ -84,7 +84,7 @@ def add_carro(carro, arquivo):
     except FileNotFoundError:
         dados = {}
     except Exception as e:
-        print("Ocorreu um erro: ", e)
+        print_vermelho("Ocorreu um erro: ", e)
 
     numero_carros = len(dados) + 1
     nome_carro = f"Carro {numero_carros}"
@@ -93,9 +93,9 @@ def add_carro(carro, arquivo):
     try:
         with open(arquivo, "w") as f:
             json.dump(dados, f, indent=4)
-        print(f"Carro {numero_carros} cadastrado com sucesso!")
+        print_verde(f"Carro {numero_carros} cadastrado com sucesso!")
     except Exception as e:
-        print("Ocorreu um erro: ", e)
+        print_vermelho("Ocorreu um erro: ", e)
 
 
 def visualizar_carro_usuario(arquivo):
@@ -119,16 +119,21 @@ def visualizar_carro_usuario(arquivo):
                   "Campo", "Informação"], tablefmt="rounded_grid"))
             input("Pressione Enter para continuar.")
         if not carro_encontrado:
-            clear_screen()
-            print("\n=====================")
-            print("Carro não encontrado.")
+            print("=====================")
+            print_vermelho("Carro não encontrado.")
             print("=====================")
             sleep(2)
     except FileNotFoundError:
-        print("Arquivo não encontrado")
+        clear_screen()
+        print("=============================")
+        print_vermelho("Arquivo não encontrado")
+        print("=============================")
         sleep(2)
     except Exception as e:
-        print("Ocorreu um erro:", e)
+        clear_screen()
+        print("==============================================================")
+        print_vermelho("Ocorreu um erro:", e)
+        print("==============================================================")
         sleep(2)
 
 
@@ -155,19 +160,19 @@ def visualizar_carro_locadora(arquivo):
             input("Pressione Enter para continuar.")
         if not carro_encontrado:
             print("\n=====================")
-            print("Carro não encontrado.\n")
+            print_vermelho("Carro não encontrado.")
             print("=====================")
             sleep(2)
     except FileNotFoundError:
         clear_screen()
         print("======================")
-        print("Arquivo não encontrado")
+        print_vermelho("Arquivo não encontrado")
         print("======================")
         input("Pressione Enter para continuar.")
     except Exception as e:
         clear_screen()
         print("======================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("======================================================")
         input("Pressione Enter para continuar.")
 
@@ -209,7 +214,7 @@ def atualizar_carro(arquivo):
                     except ValueError:
                         clear_screen()
                         print("\n================")
-                        print("Número inválido.")
+                        print_vermelho("Número inválido.")
                         print("================")
                         sleep(2)
                         return
@@ -223,7 +228,7 @@ def atualizar_carro(arquivo):
                     json.dump(carros, f, indent=4)
                     clear_screen()
                     print("\n=============================")
-                    print("Carro atualizado com sucesso!")
+                    print_verde("Carro atualizado com sucesso!")
                     print("=============================")
                     sleep(2)
                     return
@@ -231,25 +236,25 @@ def atualizar_carro(arquivo):
             if not carro_encontrado:
                 clear_screen()
                 print("=====================")
-                print("Carro não encontrado.")
+                print_vermelho("Carro não encontrado.")
                 print("=====================")
                 sleep(2)
     except FileNotFoundError:
         clear_screen()
         print("\n======================")
-        print("Arquivo não encontrado")
+        print_vermelho("Arquivo não encontrado")
         print("======================")
         sleep(2)
     except json.JSONDecodeError:
         clear_screen()
         print("\n==================================")
-        print("Erro ao ler o arquivo de carros.")
+        print_vermelho("Erro ao ler o arquivo de carros.")
         print("==================================")
         sleep(2)
     except Exception as e:
         clear_screen()
         print("\n=============================================")
-        print(f"Ocorreu um erro: {e}")
+        print_vermelho(f"Ocorreu um erro: {e}")
         print("=============================================")
         sleep(2)
 
@@ -279,7 +284,7 @@ def deletar_carro(arquivo):
                         del carros[info_carro]
                         clear_screen()
                         print("===========================")
-                        print("Carro deletado com sucesso!")
+                        print_verde("Carro deletado com sucesso!")
                         print("===========================")
                         input("Pressione Enter para continuar.")
                     else:
@@ -297,18 +302,18 @@ def deletar_carro(arquivo):
             if not carro_encontrado:
                 clear_screen()
                 print("=====================")
-                print("Carro não encontrado.")
+                print_vermelho("Carro não encontrado.")
                 print("=====================")
                 input("Pressione Enter para continuar.")
     except FileNotFoundError:
         clear_screen()
         print("======================")
-        print("Arquivo não encontrado")
+        print_vermelho("Arquivo não encontrado")
         print("======================")
         input("Pressione Enter para continuar.")
     except Exception as e:
         clear_screen()
         print("===========================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("===========================================================")
         input("Pressione Enter para continuar.")

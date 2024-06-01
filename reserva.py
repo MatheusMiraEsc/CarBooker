@@ -1,7 +1,7 @@
 import json
 import datetime
 from time import sleep
-from util import clear_screen
+from util import clear_screen, print_vermelho, print_verde
 from carros import visualizar_carro_usuario
 from tabulate import tabulate
 
@@ -39,7 +39,7 @@ def menu_usuario_reserva(dados_usuario):
         else:
             clear_screen()
             print("\n================================")
-            print("Opção inválida! Tente novamente")
+            print_vermelho("Opção inválida! Tente novamente")
             print("==================================")
             sleep(2)
 
@@ -66,7 +66,7 @@ def menu_locadora_reserva(dados_locadora):
         else:
             clear_screen()
             print("\n================================")
-            print("Opção inválida! Tente novamente")
+            print_vermelho("Opção inválida! Tente novamente")
             print("==================================")
             sleep(2)
 
@@ -91,7 +91,7 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
     if not confirmado:
         clear_screen()
         print("\n==============================")
-        print(mensagem)
+        print_vermelho(mensagem)
         print("================================")
         sleep(2)
         return
@@ -135,14 +135,14 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
                 else:
                     clear_screen()
                     print("\n===============")
-                    print("Opção inválida!")
+                    print_vermelho("Opção inválida!")
                     print("=================")
                     sleep(2)
 
     if not carro_encontrado:
         clear_screen()
         print("====================================")
-        print("Carro não encontrado ou já reservado")
+        print_vermelho("Carro não encontrado ou já reservado")
         print("====================================")
         sleep(2)
         return
@@ -168,15 +168,51 @@ def fazerReserva(arquivo, usuario, arquivoCarros):
             json.dump(reservation, f, indent=4)
         clear_screen()
         print("==============================")
-        print("Reserva realizada com sucesso!")
+        print_verde("Reserva realizada com sucesso!")
         print("==============================")
         sleep(2)
     except Exception as e:
         clear_screen()
         print("=============================================================")
-        print("Ocorreu um erro ao salvar a reserva: ", e)
+        print_vermelho("Ocorreu um erro ao salvar a reserva: ", e)
         print("=============================================================")
         sleep(2)
+
+
+def checar_reserva(arquivo, dados_usuario):
+    try:
+        with open(arquivo, "r") as f:
+            reservas = json.load(f)
+    except FileNotFoundError:
+        clear_screen()
+        print("\n===================================")
+        print_vermelho("Arquivo de reservas não encontrado.")
+        print("=====================================")
+        sleep(2)
+        return
+    except json.JSONDecodeError:
+        clear_screen()
+        print("\n==================================")
+        print_vermelho("Erro ao ler o arquivo de reservas.")
+        print("===================================")
+        sleep(2)
+        return
+    cpf_usuario = dados_usuario["CPF"]
+
+    if cpf_usuario in reservas:
+        tabela = []
+        for chaves, info in reservas[cpf_usuario].items():
+            tabela.append((chaves, info))
+
+        print(tabulate(tabela, headers=[
+              "Campo", "Informação"], tablefmt="rounded_grid"))
+    else:
+        clear_screen()
+        print("============================")
+        print_vermelho(f"Nenhuma reserva encontrada.")
+        print("=============================")
+
+    input("Pressione Enter para continuar.")
 
 
 def checar_reservas_locadora(arquivo, dados_locadora):
@@ -186,14 +222,14 @@ def checar_reservas_locadora(arquivo, dados_locadora):
     except FileNotFoundError:
         clear_screen()
         print("\n===================================")
-        print("Arquivo de reservas não encontrado.")
+        print_vermelho("Arquivo de reservas não encontrado.")
         print("=====================================")
         sleep(2)
         return
     except json.JSONDecodeError:
         clear_screen()
         print("\n==================================")
-        print("Erro ao ler o arquivo de reservas.")
+        print_vermelho("Erro ao ler o arquivo de reservas.")
         print("====================================")
         sleep(2)
         return
@@ -220,7 +256,7 @@ def checar_reservas_locadora(arquivo, dados_locadora):
     else:
         clear_screen()
         print("============================")
-        print("Nenhuma reserva encontrada.")
+        print_vermelho("Nenhuma reserva encontrada.")
         print("=============================")
 
     input("Pressione Enter para continuar.")
@@ -244,7 +280,7 @@ def alterar_reserva(arquivoReservas, usuario):
             if not confirmar_reserva:
                 clear_screen()
                 print("\n=============================")
-                print("Usuário não tem reserva feita")
+                print_vermelho("Usuário não tem reserva feita")
                 print("===============================")
                 sleep(2)
                 return
@@ -275,7 +311,7 @@ def alterar_reserva(arquivoReservas, usuario):
             except ValueError:
                 clear_screen()
                 print("\n================")
-                print("Número inválido.")
+                print_vermelho("Número inválido.")
                 print("==================")
                 sleep(2)
                 return
@@ -290,26 +326,26 @@ def alterar_reserva(arquivoReservas, usuario):
 
             clear_screen()
             print("\n=============================")
-            print("Reserva alterada com sucesso.")
+            print_verde("Reserva alterada com sucesso.")
             print("==============================")
             sleep(2)
 
     except FileNotFoundError:
         clear_screen()
         print("\n===================================")
-        print("Arquivo de reservas não encontrado.")
+        print_vermelho("Arquivo de reservas não encontrado.")
         print("=====================================")
         sleep(2)
     except json.JSONDecodeError:
         clear_screen()
         print("\n==================================")
-        print("Erro ao ler o arquivo de reservas.")
+        print_vermelho("Erro ao ler o arquivo de reservas.")
         print("====================================")
         sleep(2)
     except Exception as e:
         clear_screen()
         print("\n=============================================")
-        print(f"Ocorreu um erro: {e}")
+        print_vermelho(f"Ocorreu um erro: {e}")
         print("===============================================")
         sleep(2)
 
@@ -326,16 +362,14 @@ def cancelar_reserva(arquivo_reservas, arquivo_carros, dados_usuario):
             if reserva_usuario is None:
                 clear_screen()
                 print("\n===========================")
-                print("Nenhuma reserva encontrada.")
+                print_vermelho("Nenhuma reserva encontrada.")
                 print("=============================")
                 return False
 
             tabela = [(chave, valor)
                       for chave, valor in reserva_usuario.items()]
-            print("\n==============================\n")
             print(tabulate(tabela, headers=[
                   "Campo", "Informação"], tablefmt="rounded_grid"))
-            print("\n==============================\n")
 
             conf = input(
                 "Você realmente deseja cancelar sua reserva? (S ou N) -> ")
@@ -357,7 +391,7 @@ def cancelar_reserva(arquivo_reservas, arquivo_carros, dados_usuario):
                 del reservas[dados_usuario["CPF"]]
                 clear_screen()
                 print("===============================")
-                print("Reserva cancelada com sucesso!")
+                print_verde("Reserva cancelada com sucesso!")
                 print("===============================")
                 f_reservas.seek(0)
                 f_reservas.truncate()
@@ -368,12 +402,12 @@ def cancelar_reserva(arquivo_reservas, arquivo_carros, dados_usuario):
     except FileNotFoundError:
         clear_screen()
         print("=======================")
-        print("Arquivo não encontrado.")
+        print_vermelho("Arquivo não encontrado.")
         print("=======================")
     except Exception as e:
         clear_screen()
         print("==================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("==================================================")
     return False
 
@@ -395,18 +429,16 @@ def cancelar_reserva_locadora(arquivo_reservas, arquivo_carros, dados_locadora):
             if not reservas_locadora:
                 clear_screen()
                 print("\n===========================")
-                print("Nenhuma reserva encontrada.")
-                print("=============================")
+                print_vermelho("Nenhuma reserva encontrada.")
+                print("============================")
                 return False
 
             for key in reservas_locadora:
                 reserva_locadora = reservas[key]
                 tabela = [(chave, valor)
                           for chave, valor in reserva_locadora.items()]
-                print("\n==============================\n")
                 print(tabulate(tabela, headers=[
                       "Campo", "Informação"], tablefmt="grid"))
-                print("\n==============================\n")
 
                 conf = input(
                     "Você realmente deseja cancelar esta reserva? (S ou N) -> ")
@@ -428,7 +460,7 @@ def cancelar_reserva_locadora(arquivo_reservas, arquivo_carros, dados_locadora):
                     del reservas[key]
                     clear_screen()
                     print("===============================")
-                    print("Reserva cancelada com sucesso!")
+                    print_verde("Reserva cancelada com sucesso!")
                     print("===============================")
                     f_reservas.seek(0)
                     f_reservas.truncate()
@@ -439,11 +471,11 @@ def cancelar_reserva_locadora(arquivo_reservas, arquivo_carros, dados_locadora):
     except FileNotFoundError:
         clear_screen()
         print("=======================")
-        print("Arquivo não encontrado.")
+        print_vermelho("Arquivo não encontrado.")
         print("=======================")
     except Exception as e:
         clear_screen()
         print("==================================================")
-        print("Ocorreu um erro:", e)
+        print_vermelho("Ocorreu um erro:", e)
         print("==================================================")
     return False

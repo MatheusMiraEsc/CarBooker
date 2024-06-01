@@ -1,3 +1,6 @@
+from colorama import init, Fore, Style
+
+
 def menuOptions():
     print("\n============================")
     print("Bem-vindo(a) ao CarBooker!!")
@@ -19,3 +22,11 @@ def cadastro_endereço():
 
 def clear_screen():
     print("\033c", end="")
+
+
+def print_verde(texto):
+    print(Fore.GREEN + texto + Style.RESET_ALL)
+
+
+def print_vermelho(texto):
+    print(Fore.RED + texto + Style.RESET_ALL)
