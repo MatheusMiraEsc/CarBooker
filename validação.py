@@ -34,12 +34,7 @@ def validar_data_nascimento(data):
 
 
 def validar_cep(cep):
-    if len(cep) == 8:
-        padrao_cep = re.compile(r'(\d){5}(\d){3}')
-
-        match = padrao_cep.match(cep)
-
-        return True
+    return cep.isdigit() and len(cep) == 8
 
 
 def validar_cpf(cpf, arquivo):
