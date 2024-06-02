@@ -100,12 +100,14 @@ def login_locadora(arquivo):
                     print("================")
                     print_vermelho("Senha incorreta.")
                     print("================")
+                    sleep(2)
                     break
         if not email_encontrado:
             clear_screen()
             print("==================================")
             print_vermelho("Email incorreto ou não cadastrado.")
             print("==================================")
+            sleep(2)
         return None, None
 
 
@@ -143,6 +145,7 @@ def menu3(locadora_logada, dados_locadora):
             print("\n================================")
             print_vermelho("Opção inválida! Tente novamente")
             print("================================")
+            sleep(2)
 
 
 def visualizar_locadora(locadora_logada, arquivo):
@@ -150,7 +153,6 @@ def visualizar_locadora(locadora_logada, arquivo):
         locadora = json.load(f)
 
     if locadora_logada in locadora:
-        print("\n==============================\n")
         dados_locadora = locadora[locadora_logada]
         tabela = []
 
@@ -162,10 +164,9 @@ def visualizar_locadora(locadora_logada, arquivo):
                         tabela.append((f"  {end_chave}", end_valor))
             else:
                 tabela.append((chave, valor))
-
+        clear_screen()
         print(tabulate(tabela, headers=[
               "Campo", "Informação"], tablefmt="rounded_grid"))
-        print("\n==============================\n")
 
     input("Pressione Enter para continuar.")
 

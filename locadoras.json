@@ -40,5 +40,30 @@
                 "UF": "12"
             }
         ]
+    },
+    "Locadora 3": {
+        "Nome": "cac",
+        "CNPJ": "12312312315",
+        "Telefone": "81991883498",
+        "Email": "teste1@gmail.com",
+        "Senha": "Te1#",
+        "Enderecos": [
+            {
+                "CEP": "",
+                "Rua": "rere",
+                "Complemento": "343",
+                "Bairro": "23",
+                "Cidade": "fd",
+                "UF": "fdf"
+            },
+            {
+                "CEP": "52061080",
+                "Rua": "Estrada das Ub\u00e1ias",
+                "Bairro": "Casa Forte",
+                "Cidade": "Recife",
+                "UF": "PE",
+                "Complemento": "apto 501b"
+            }
+        ]
     }
 }

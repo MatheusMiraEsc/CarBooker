@@ -166,7 +166,7 @@ def visualizar_usuario(usuario_logado, arquivo):
                         tabela.append((f"  {end_chave}", end_valor))
             else:
                 tabela.append((chave, valor))
-
+        clear_screen()
         print(tabulate(tabela, headers=[
               "Campo", "Informação"], tablefmt="rounded_grid"))
         input("Pressione Enter para continuar.")
