@@ -227,7 +227,6 @@ def atualizar_locadora(arquivo, locadora_logada):
 
             valor = input(f"Digite a nova informação para {chave}: ")
 
-            # Função para fazer validação de input aqui (se necessário)
             obj[chave] = valor
 
             f.seek(0)
