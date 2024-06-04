@@ -228,7 +228,6 @@ def atualizar_usuario(arquivo, usuario_logado):
 
             valor = input(f"Digite a nova informação para {chave}: ")
 
-            # Função para fazer validação de input aqui (se necessário)
             obj[chave] = valor
 
             f.seek(0)
