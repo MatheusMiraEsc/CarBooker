@@ -7,11 +7,48 @@ from reserva import menu_locadora_reserva
 from tabulate import tabulate
 
 
+def menu3(locadora_logada, dados_locadora):
+    arquivo_json = "locadoras.json"
+    while True:
+        clear_screen()
+        print("\n=================================")
+        print(f"Bem-vindo(a), {dados_locadora['Nome']}!")
+        print("1. Visualizar locadora")
+        print("2. Atualizar informações da locadora")
+        print("3. Carros")
+        print("4. Reservas")
+        print("5. Deletar locadora")
+        print("6. Voltar")
+        print("=================================")
+        opcao = input("Escolha uma opção: ")
+        if opcao == "1":
+            visualizar_locadora(locadora_logada, arquivo_json)
+        elif opcao == "2":
+            atualizar_locadora(arquivo_json, locadora_logada)
+            sleep(2)
+        elif opcao == "3":
+            menu_locadora(dados_locadora)
+        elif opcao == "4":
+            menu_locadora_reserva(dados_locadora)
+        elif opcao == "5":
+            if deletar_locadora(arquivo_json, locadora_logada):
+                sleep(2)
+                return
+        elif opcao == "6":
+            break
+        else:
+            clear_screen()
+            print("\n================================")
+            print_vermelho("Opção inválida! Tente novamente")
+            print("================================")
+            sleep(2)
+
+
 def cadastrar_locadora(arquivo):
     chaves = ["Nome", "CNPJ", "Telefone", "Email", "Senha"]
     validadores = {
         "Nome": validar_nome,
-        "CNPJ": lambda cnpj: validar_cnpj(cnpj),
+        "CNPJ": validar_cnpj,
         "Telefone": validar_telefone,
         "Email": lambda email: validar_email(email, arquivo),
         "Senha": validar_senha
@@ -109,43 +146,6 @@ def login_locadora(arquivo):
             print("==================================")
             sleep(2)
         return None, None
-
-
-def menu3(locadora_logada, dados_locadora):
-    arquivo_json = "locadoras.json"
-    while True:
-        clear_screen()
-        print("\n=================================")
-        print(f"Bem-vindo(a), {dados_locadora['Nome']}!")
-        print("1. Visualizar locadora")
-        print("2. Atualizar informações da locadora")
-        print("3. Carros")
-        print("4. Reservas")
-        print("5. Deletar locadora")
-        print("6. Voltar")
-        print("=================================")
-        opcao = input("Escolha uma opção: ")
-        if opcao == "1":
-            visualizar_locadora(locadora_logada, arquivo_json)
-        elif opcao == "2":
-            atualizar_locadora(arquivo_json, locadora_logada)
-            sleep(2)
-        elif opcao == "3":
-            menu_locadora(dados_locadora)
-        elif opcao == "4":
-            menu_locadora_reserva(dados_locadora)
-        elif opcao == "5":
-            if deletar_locadora(arquivo_json, locadora_logada):
-                sleep(2)
-                return
-        elif opcao == "6":
-            break
-        else:
-            clear_screen()
-            print("\n================================")
-            print_vermelho("Opção inválida! Tente novamente")
-            print("================================")
-            sleep(2)
 
 
 def visualizar_locadora(locadora_logada, arquivo):

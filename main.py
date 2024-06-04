@@ -1,7 +1,9 @@
 from usuarios import menu2, login, cadastrar_usuario, add_usuario
 from locadoras import menu3, cadastrar_locadora, add_locadora, login_locadora
-from util import menuOptions, clear_screen, print_vermelho, print_verde
+from util import menuOptions, clear_screen, print_vermelho
 from time import sleep
+
+
 
 
 def main():

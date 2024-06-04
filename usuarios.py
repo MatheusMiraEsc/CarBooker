@@ -80,7 +80,6 @@ def login(arquivo):
             print("================================")
             print_vermelho("Email incorreto ou não cadastrado.")
             print("================================")
-    return None, None
 
 
 def cadastrar_usuario(arquivo):

@@ -1,13 +1,12 @@
 import re
 import json
 from datetime import datetime
-# from package_viacep import viacep
 
 
 def validar_nome(nome):
-    if len(nome) == 0:
+    if len(nome) == 0 or nome.isspace():
         return False, "Nome não pode ficar vazio."
-    elif not nome.isalpha():
+    elif not all(char.isalpha() or char.isspace() for char in nome):
         return False, "Nome deve ser composto apenas por letras."
     return True, ""
 
@@ -98,6 +97,8 @@ def validar_email(email, arquivo):
 def validar_senha(senha):
     if len(senha) == 0:
         return False, "Senha não pode ficar vazia."
+    if len(senha) < 8:
+        return False, "Senha deve ter pelo menos 8 caracteres."
     has_upper = any(c.isupper() for c in senha)
     has_lower = any(c.islower() for c in senha)
     has_digit = any(c.isdigit() for c in senha)
